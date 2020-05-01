@@ -16,7 +16,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    lintOptions {
+        abortOnError false
+    }
     dataBinding {
         enabled = true
     }
@@ -29,10 +31,20 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     // Required
     annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01'
     annotationProcessor 'androidx.room:room-compiler:2.1.0-rc01'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    annotationProcessor 'androidx.databinding:databinding-compiler:3.4.2'
 
-    implementation 'com.mapsted:core-positioning-all-in-one:3.4.4.2'
+
+    //Add dependencies for using Mapsted sdk
+    implementation("com.mapsted:sdk-map:3.7.1.21")
+    implementation("com.mapsted:sdk-map-ui:3.7.1.21")
+    implementation("com.mapsted:sdk-ui-components:3.7.1.21")
+    implementation("com.mapsted:sdk-positioning:3.7.1.21")
+    implementation("com.mapsted:sdk-apptemplate:3.7.1.21")
+    testImplementation 'junit:junit:4.12'
 }

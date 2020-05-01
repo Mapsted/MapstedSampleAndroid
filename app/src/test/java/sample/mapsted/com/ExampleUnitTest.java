@@ -2,7 +2,7 @@ package sample.mapsted.com;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
