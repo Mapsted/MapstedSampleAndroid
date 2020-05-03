@@ -39,12 +39,11 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     annotationProcessor 'androidx.databinding:databinding-compiler:3.4.2'
 
-
     //Add dependencies for using Mapsted sdk
-    implementation("com.mapsted:sdk-map:3.7.1.21")
-    implementation("com.mapsted:sdk-map-ui:3.7.1.21")
-    implementation("com.mapsted:sdk-ui-components:3.7.1.21")
-    implementation("com.mapsted:sdk-positioning:3.7.1.21")
-    implementation("com.mapsted:sdk-apptemplate:3.7.1.21")
+    implementation("com.mapsted:sdk-map:3.7.1.22")
+    implementation("com.mapsted:sdk-map-ui:3.7.1.22")
+    implementation("com.mapsted:sdk-ui-components:3.7.1.22")
+    implementation("com.mapsted:sdk-positioning:3.7.1.22")
+    implementation("com.mapsted:sdk-apptemplate:3.7.1.22")
     testImplementation 'junit:junit:4.12'
 }
