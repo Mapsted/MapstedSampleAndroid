@@ -2,7 +2,7 @@
 
 This sample app from Mapsted demonstrates how to use our SDKs. A <b>Mapsted licence file</b> is required in order to run the sample application. Please visit <a href="https://mapsted.com/contact-us">Contact Us Page</a> to request the license file.
 
-For more information, please visit <a href="https://developer.mapsted.com/getting-started/">Developer Docs Page</a>.
+For more information, please visit <a href="https://developer.mapsted.com/">Developer Docs Page</a>.
 
 <h2>How to Set Up a Mapsted Sample Project for Android</h2>
 
@@ -16,6 +16,6 @@ For more information, please visit <a href="https://developer.mapsted.com/gettin
 
 <h2>Site Map</h2>
 
-Developer Docs: https://developer.mapsted.com/getting-started/
+Developer Docs: https://developer.mapsted.com/
 <br/>API Reference: https://developer.mapsted.com/api-references/android/3.7.1/javadoc/reference/packages.html
 
