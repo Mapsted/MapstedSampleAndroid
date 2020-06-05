@@ -1,6 +1,6 @@
 <h1>Mapsted Sample App (Android)</h1>
 
-This sample app from Mapsted demonstrates how to use our SDKs. A <b>Mapsted licence file</b> is required in order to run the sample application. Please visit <a href="https://mpasted.com/contact-us">Contact Us Page</a> to request the license file.
+This sample app from Mapsted demonstrates how to use our SDKs. A <b>Mapsted licence file</b> is required in order to run the sample application. Please visit <a href="https://mapsted.com/contact-us">Contact Us Page</a> to request the license file.
 
 For more information, please visit <a href="https://developer.mapsted.com/android/guides/getting-started-all-in-one/index.html">Developer Docs Page</a>.
 
