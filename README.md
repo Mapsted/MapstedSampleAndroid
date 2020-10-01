@@ -17,5 +17,4 @@ For more information, please visit <a href="https://developer.mapsted.com/">Deve
 <h2>Site Map</h2>
 
 Developer Docs: https://developer.mapsted.com/
-<br/>API Reference: https://developer.mapsted.com/api-references/android/3.7.1/javadoc/
-
+<br/>API Reference: https://developer.mapsted.com/api-references/android/4.0.0/javadoc/
