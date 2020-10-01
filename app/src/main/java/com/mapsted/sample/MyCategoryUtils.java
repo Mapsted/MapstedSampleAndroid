@@ -2,12 +2,12 @@ package com.mapsted.sample;
 
 import com.mapsted.corepositioning.cppObjects.swig.Category;
 import com.mapsted.corepositioning.cppObjects.swig.CategoryTree;
-import com.mapsted.positioning.positioning.MapstedPositioningApi;
+import com.mapsted.positioning.CoreApi;
+import com.mapsted.positioning.core.utils.Logger;
+import com.mapsted.ui.MapUiApi;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 public class MyCategoryUtils {
     public static List<MyCategory> createSomeItems() {
@@ -33,10 +33,10 @@ public class MyCategoryUtils {
 
     }
 
-    public static List<Category> createCategoryList() {
-
+    public static List<Category> createCategoryList(MapUiApi sdk) {
+        CoreApi coreApi = sdk.getMapApi().getCoreApi();
         List<Category> myCategories = new ArrayList<>();
-        CategoryTree categoryTree = MapstedPositioningApi.getInstance().getGlobalCategoryTree();
+        CategoryTree categoryTree = coreApi.getGlobalCategoryTree();
 
         String[] cateIds = new String[]{"c2d2-d24d-12085",
                 "c2d2-d24d-12086",
@@ -48,7 +48,7 @@ public class MyCategoryUtils {
                 "c2d2-d24d-12101"};
         for (String catId : cateIds) {
             Category category = categoryTree.getCategory(catId);
-            Timber.v("categoryId %s -> %s", catId, category);
+            Logger.v("categoryId %s -> %s", catId, category);
             myCategories.add(category);
         }
         return myCategories;

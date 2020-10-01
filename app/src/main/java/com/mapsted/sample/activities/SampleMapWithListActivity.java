@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,38 +25,37 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.mapsted.SdkError;
 import com.mapsted.corepositioning.cppObjects.swig.Category;
-import com.mapsted.map.MapstedMapApi;
-import com.mapsted.map.models.interfaces.OnSetSelectedPropertyListener;
+import com.mapsted.corepositioning.cppObjects.swig.Common;
+import com.mapsted.map.models.interfaces.OnMapDataSelectedListener;
 import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.MyCategoryUtils;
 import com.mapsted.sample.R;
-import com.mapsted.ui.map.processing.CustomParams;
-import com.mapsted.ui.map.processing.MapstedSdkController;
+import com.mapsted.ui.CustomParams;
+import com.mapsted.ui.MapUiApi;
+import com.mapsted.ui.MapstedMapUiApiProvider;
+import com.mapsted.ui.MapstedSdkController;
 import com.mapsted.ui_components.list.MapstedListAdapter;
 import com.mapsted.ui_components.list.MapstedListView;
 
 import java.util.List;
 
 
-public class SampleMapWithListActivity extends AppCompatActivity {
+public class SampleMapWithListActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
     private static final String TAG = SampleMapWithListActivity.class.getSimpleName();
     private FrameLayout fl_map_content;
     private FrameLayout fl_map_ui_tool;
 
-    private MapstedSdkController sdkController = MapstedSdkController.getInstance();
+    private MapUiApi mapUiApi;
     private View rootView;
     private Context context;
 
-    private int dubaiMallPropertyId = 592;
-    private int soukPropertyId = 600;
     private String myTag;
 
     @Override
@@ -64,6 +64,7 @@ public class SampleMapWithListActivity extends AppCompatActivity {
         Log.i(TAG, "::onCreate");
 
         context = this.getApplicationContext();
+        mapUiApi = MapstedSdkController.newInstance(context);
 
         setContentView(R.layout.activity_sample_main);
         rootView = findViewById(R.id.rootView);
@@ -74,7 +75,7 @@ public class SampleMapWithListActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (!MapstedSdkController.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+        if (!mapUiApi.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
@@ -90,21 +91,10 @@ public class SampleMapWithListActivity extends AppCompatActivity {
                 .setMapZoomRange(new MapstedMapRange(6.0f, 24.0f))
                 .build();
 
-        sdkController.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
+        mapUiApi.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "::setupMapstedSdk ::onSuccess");
-
-                MapstedMapApi.selectPropertyAndDrawIfNeeded(dubaiMallPropertyId, new OnSetSelectedPropertyListener() {
-                    @Override
-                    public void onSetSelectedProperty(boolean isSuccessful) {
-                        Log.i(TAG, "::SelectedProperty " + (isSuccessful ? "SUCCESSFUL" : "FAILED"));
-
-                        if (isSuccessful) {
-                            putListViewComponentOnTheMapstedMap();
-                        }
-                    }
-                });
             }
 
             @Override
@@ -118,7 +108,7 @@ public class SampleMapWithListActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        sdkController.removeViewFromMap(myTag);
+        mapUiApi.removeViewFromMap(myTag);
         super.onStop();
     }
 
@@ -128,13 +118,13 @@ public class SampleMapWithListActivity extends AppCompatActivity {
         MapstedListView mapstedListView = (MapstedListView) inflate.findViewById(R.id.mylist);
 
         // Set Data
-        List<Category> items = MyCategoryUtils.createCategoryList();
+        List<Category> items = MyCategoryUtils.createCategoryList(mapUiApi);
 
         // Create adapter and set layout manager
         MapstedListAdapter adapter = new MapstedListAdapter(items, listener);
         mapstedListView.setListViewAdapter(adapter);
         String tag = "com.example.view.mylistviewtag";
-        myTag = sdkController.addViewToMap(tag, inflate);
+        myTag = mapUiApi.addViewToMap(tag, inflate);
     }
 
     private MapstedListAdapter.Listener<Category> listener = new MapstedListAdapter.Listener<Category>() {
@@ -142,12 +132,11 @@ public class SampleMapWithListActivity extends AppCompatActivity {
         public void onItemClicked(int position, View view, Category item) {
             String message = "item clicked position=" + position + ", item=" + item.getName();
             /*Log.d(TAG, message);*/
-            Snackbar.make(rootView, message, BaseTransientBottomBar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
         }
 
         @Override
-        public MapstedListAdapter.MapstedListViewHolder getMapstedListViewHolder() {
-
+        public MapstedListAdapter.MapstedListViewHolder<Category> getMapstedListViewHolder(ViewGroup parent, int viewType) {
             View itemLayout = LayoutInflater.from(context).inflate(R.layout.sample_category_item_layout, null, false);
 
             return new MapstedListAdapter.MapstedListViewHolder<Category>(itemLayout) {
@@ -190,7 +179,7 @@ public class SampleMapWithListActivity extends AppCompatActivity {
         Log.d(TAG, "setParentCategory: imageUrl=" + imageUrl);
         Glide.with(ivCategoryImage)
                 .load(imageUrl)
-                .placeholder(com.mapsted.apptemplate.R.drawable.ic_category_shopping_active)
+                .placeholder(R.drawable.ic_category_shopping_active)
                 .transform(new MultiTransformation<>(new RoundedCorners(8), new FitCenter()))
                 .into(target);
     }
@@ -212,7 +201,12 @@ public class SampleMapWithListActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        sdkController.onDestroy();
+        mapUiApi.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public MapUiApi provideMapstedUiApi() {
+        return mapUiApi;
     }
 }

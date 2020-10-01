@@ -7,29 +7,28 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mapsted.SdkError;
-import com.mapsted.map.MapstedMapApi;
-import com.mapsted.map.models.interfaces.OnSetSelectedPropertyListener;
+import com.mapsted.map.MapApi;
 import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.SdkError;
+import com.mapsted.positioning.core.utils.Logger;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.R;
-import com.mapsted.ui.map.processing.CustomParams;
-import com.mapsted.ui.map.processing.MapstedSdkController;
+import com.mapsted.ui.CustomParams;
+import com.mapsted.ui.MapUiApi;
+import com.mapsted.ui.MapstedMapUiApiProvider;
+import com.mapsted.ui.MapstedSdkController;
 
 
-public class SampleMapWithUiToolsActivity extends AppCompatActivity {
+public class SampleMapWithUiToolsActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
     private static final String TAG = SampleMapWithUiToolsActivity.class.getSimpleName();
     private FrameLayout fl_map_content;
     private FrameLayout fl_map_ui_tool;
 
-    private MapstedSdkController sdkController;
-
-
-    private int dubaiMallPropertyId = 592;
-    private int soukPropertyId = 600;
+    private MapUiApi sdk;
+    private MapApi mapApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +37,15 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample_main);
         fl_map_content = findViewById(R.id.my_map_container);
         fl_map_ui_tool = findViewById(R.id.my_map_ui_tool);
-        sdkController = MapstedSdkController.getInstance();
+        sdk = MapstedSdkController.newInstance(getApplicationContext());
+        mapApi = sdk.getMapApi();
         Params.initialize(this);
         setupMapstedSdk();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (!MapstedSdkController.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+        if (!sdk.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
@@ -57,22 +57,17 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity {
         CustomParams.newBuilder()
                 .setBaseMapStyle(BaseMapStyle.DEFAULT)
                 .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
+                .setShowPropertyListOnMapLaunch(true)
+                .setEnablePropertyListSelection(true)
                 .setMapZoomRange(new MapstedMapRange(6.0f, 24.0f))
                 .build();
 
 
-        sdkController.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
+        sdk.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
 
             @Override
             public void onSuccess() {
                 Log.i(TAG, "::setupMapstedSdk ::onSuccess");
-
-                MapstedMapApi.selectPropertyAndDrawIfNeeded(dubaiMallPropertyId, new OnSetSelectedPropertyListener() {
-                    @Override
-                    public void onSetSelectedProperty(boolean isSuccessful) {
-                        Log.i(TAG, "::SelectedProperty " + (isSuccessful ? "SUCCESSFUL" : "FAILED"));
-                    }
-                });
             }
 
             @Override
@@ -85,7 +80,20 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        sdkController.onDestroy();
+        sdk.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public MapUiApi provideMapstedUiApi() {
+        if(sdk == null)
+            sdk = MapstedSdkController.newInstance(getApplicationContext());
+        return sdk;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Logger.d("onBackPressed: ");
+        super.onBackPressed();
     }
 }

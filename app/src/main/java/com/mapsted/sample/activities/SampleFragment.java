@@ -1,5 +1,6 @@
 package com.mapsted.sample.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,25 +13,29 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.mapsted.SdkError;
+import com.mapsted.map.models.layers.BaseMapStyle;
+import com.mapsted.map.views.MapPanType;
+import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.SdkError;
 import com.mapsted.sample.R;
-import com.mapsted.ui.map.processing.MapstedSdkController;
+import com.mapsted.ui.CustomParams;
+import com.mapsted.ui.MapUiApi;
+import com.mapsted.ui.MapstedMapUiApiProvider;
 
 public class SampleFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
 
-
-    private String mParam1;
-    private String mParam2;
+    private MapUiApi sdk;
     private String TAG = SampleFragment.class.getSimpleName();
 
-
-    public SampleFragment() {
-        // Required empty public constructor
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MapstedMapUiApiProvider  apiProvider = (MapstedMapUiApiProvider)context;
+        sdk = apiProvider.provideMapstedUiApi();
     }
-
 
     public static SampleFragment newInstance(String param1) {
         SampleFragment fragment = new SampleFragment();
@@ -43,9 +48,6 @@ public class SampleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
     }
 
     @Override
@@ -58,8 +60,12 @@ public class SampleFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FrameLayout mapContainerView = view.findViewById(R.id.map_container);
-
-        MapstedSdkController.getInstance().initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
+        CustomParams.newBuilder()
+                .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
+                .setShowPropertyListOnMapLaunch(true)
+                .setEnablePropertyListSelection(true)
+                .build();
+        sdk.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
 
     }
 
@@ -78,7 +84,7 @@ public class SampleFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        MapstedSdkController.getInstance().onDestroy();
+        sdk.onDestroy();
         super.onDestroy();
     }
 }

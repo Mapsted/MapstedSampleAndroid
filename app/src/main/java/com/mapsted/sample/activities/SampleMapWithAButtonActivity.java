@@ -12,19 +12,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.mapsted.SdkError;
-import com.mapsted.map.MapstedMapApi;
-import com.mapsted.map.models.interfaces.OnSetSelectedPropertyListener;
+import com.mapsted.corepositioning.cppObjects.swig.Common;
+import com.mapsted.map.MapApi;
+import com.mapsted.map.models.interfaces.OnMapDataSelectedListener;
 import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.R;
-import com.mapsted.ui.map.processing.CustomParams;
-import com.mapsted.ui.map.processing.MapstedSdkController;
+import com.mapsted.ui.CustomParams;
+import com.mapsted.ui.MapUiApi;
+import com.mapsted.ui.MapstedMapUiApiProvider;
+import com.mapsted.ui.MapstedSdkController;
 
-public class SampleMapWithAButtonActivity extends AppCompatActivity {
+
+public class SampleMapWithAButtonActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
 
     private static final String TAG = SampleMapWithAButtonActivity.class.getSimpleName();
     private View rootView;
@@ -32,11 +36,9 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity {
     private FrameLayout fl_map_ui_tool;
 
 
-    private MapstedSdkController sdkController;
-
-    private int dubaiMallPropertyId = 592;
-    private int soukPropertyId = 600;
+    private MapUiApi mapUiApi;
     private String myTag;
+    private MapApi mapApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,8 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity {
         rootView = findViewById(R.id.rootView);
         fl_map_content = findViewById(R.id.my_map_container);
         fl_map_ui_tool = findViewById(R.id.my_map_ui_tool);
-        sdkController = MapstedSdkController.getInstance();
+        mapUiApi = MapstedSdkController.newInstance(getApplicationContext());
+        mapApi = mapUiApi.getMapApi();
         Params.initialize(this);
         setupMapstedSdk();
     }
@@ -54,7 +57,7 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult: ");
-        if (!MapstedSdkController.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+        if (!mapUiApi.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
@@ -63,14 +66,14 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity {
     public void setupMapstedSdk() {
         Log.i(TAG, "::setupMapstedSdk");
 
-        // TODO: This needs to be in the app itself not in app template...
         CustomParams.newBuilder()
-                .setBaseMapStyle(BaseMapStyle.DARK)
                 .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
+                .setShowPropertyListOnMapLaunch(true)
+                .setEnablePropertyListSelection(true)
                 .setMapZoomRange(new MapstedMapRange(6.0f, 24.0f))
                 .build();
 
-        sdkController.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
+        mapUiApi.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
 
             @Override
             public void onSuccess() {
@@ -82,18 +85,11 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         String message = "Hello! You clicked " + ((Button) v).getText() + ".";
                         /*Log.d(TAG, "onClick: ");*/
-                        Snackbar.make(rootView, message, BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
-                myTag = sdkController.addViewToMap(tag, inflate);
+                myTag = mapUiApi.addViewToMap(tag, inflate);
                 Log.d(TAG, "onSuccess: myTag= " + myTag);
-
-                MapstedMapApi.selectPropertyAndDrawIfNeeded(dubaiMallPropertyId, new OnSetSelectedPropertyListener() {
-                    @Override
-                    public void onSetSelectedProperty(boolean isSuccessful) {
-                        Log.i(TAG, "::selectPropertyAndDrawIfNeeded onSetSelectedProperty " + (isSuccessful ? "SUCCESSFUL" : "FAILED"));
-                    }
-                });
             }
 
             @Override
@@ -108,14 +104,19 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         Log.d(TAG, "onStop: ");
-        sdkController.removeViewFromMap(myTag);
+        mapUiApi.removeViewFromMap(myTag);
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy: ");
-        sdkController.onDestroy();
+        mapUiApi.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public MapUiApi provideMapstedUiApi() {
+        return mapUiApi;
     }
 }
