@@ -40,11 +40,11 @@ dependencies {
     annotationProcessor 'androidx.databinding:databinding-compiler:3.4.1'
 
     //Add dependencies for using Mapsted sdk
-    implementation("com.mapsted:sdk-core:4.1.0")
-    implementation("com.mapsted:sdk-map:4.1.0")
-    implementation("com.mapsted:sdk-map-ui:4.1.0")
-    implementation("com.mapsted:sdk-ui-components:4.1.0")
-    implementation("com.mapsted:app-template-mall:4.1.0")
+    implementation("com.mapsted:sdk-core:4.1.+")
+    implementation("com.mapsted:sdk-map:4.1.+")
+    implementation("com.mapsted:sdk-map-ui:4.1.+")
+    implementation("com.mapsted:sdk-ui-components:4.1.+")
+    implementation("com.mapsted:app-template-mall:4.1.+")
 
     testImplementation 'junit:junit:4.12'
 }
