@@ -1,6 +1,7 @@
 package com.mapsted.sample.activities;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -208,5 +209,11 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
     @Override
     public MapUiApi provideMapstedUiApi() {
         return mapUiApi;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mapUiApi.onConfigurationChanged(this, newConfig);
     }
 }

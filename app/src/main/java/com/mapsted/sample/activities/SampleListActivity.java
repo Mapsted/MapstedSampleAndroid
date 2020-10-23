@@ -1,5 +1,6 @@
 package com.mapsted.sample.activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -82,5 +84,11 @@ public class SampleListActivity extends AppCompatActivity implements MapstedMapU
     @Override
     public MapUiApi provideMapstedUiApi() {
         return mapUiApi;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mapUiApi.onConfigurationChanged(this, newConfig);
     }
 }

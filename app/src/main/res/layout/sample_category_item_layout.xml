@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dp_8"
-    android:paddingRight="@dimen/dp_8">
+    android:paddingStart="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_8">
 
     <!-- Icon Container -->
     <RelativeLayout

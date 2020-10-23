@@ -1,5 +1,6 @@
 package com.mapsted.sample.activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,5 +36,11 @@ public class SampleActivityWithFragment extends AppCompatActivity implements Map
     @Override
     public MapUiApi provideMapstedUiApi() {
         return mapUiApi;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mapUiApi.onConfigurationChanged(this, newConfig);
     }
 }

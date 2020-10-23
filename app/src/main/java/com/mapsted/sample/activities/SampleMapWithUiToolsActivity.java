@@ -1,5 +1,6 @@
 package com.mapsted.sample.activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -95,5 +96,11 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
     public void onBackPressed() {
         Logger.d("onBackPressed: ");
         super.onBackPressed();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        sdk.onConfigurationChanged(this, newConfig);
     }
 }

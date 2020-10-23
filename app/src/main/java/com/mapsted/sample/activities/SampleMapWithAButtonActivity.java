@@ -1,5 +1,6 @@
 package com.mapsted.sample.activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -118,5 +119,11 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity implements M
     @Override
     public MapUiApi provideMapstedUiApi() {
         return mapUiApi;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mapUiApi.onConfigurationChanged(this, newConfig);
     }
 }
