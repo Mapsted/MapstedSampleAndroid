@@ -87,8 +87,6 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
 
     @Override
     public MapUiApi provideMapstedUiApi() {
-        if(sdk == null)
-            sdk = MapstedSdkController.newInstance(getApplicationContext());
         return sdk;
     }
 
