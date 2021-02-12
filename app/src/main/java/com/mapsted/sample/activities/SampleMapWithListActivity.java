@@ -111,6 +111,21 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
         super.onStop();
     }
 
+    void putListViewComponentOnTheMapstedMap() {
+        // Create custom layout
+        View inflate = LayoutInflater.from(this).inflate(R.layout.sample_layout, null, false);
+        MapstedListView mapstedListView = (MapstedListView) inflate.findViewById(R.id.mylist);
+
+        // Set Data
+        List<Category> items = MyCategoryUtils.createCategoryList(mapUiApi);
+
+        // Create adapter and set layout manager
+        MapstedListAdapter adapter = new MapstedListAdapter(items, listener);
+        mapstedListView.setListViewAdapter(adapter);
+        String tag = "com.example.view.mylistviewtag";
+        myTag = mapUiApi.addViewToMap(tag, inflate);
+    }
+
     private MapstedListAdapter.Listener<Category> listener = new MapstedListAdapter.Listener<Category>() {
         @Override
         public void onItemClicked(int position, View view, Category item) {
