@@ -27,14 +27,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
-import com.mapsted.corepositioning.cppObjects.swig.Category;
-import com.mapsted.corepositioning.cppObjects.swig.Common;
-import com.mapsted.map.models.interfaces.OnMapDataSelectedListener;
 import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
+import com.mapsted.positioning.core.network.property_metadata.model.Category;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.MyCategoryUtils;
 import com.mapsted.sample.R;
@@ -111,21 +109,6 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
     protected void onStop() {
         mapUiApi.removeViewFromMap(myTag);
         super.onStop();
-    }
-
-    void putListViewComponentOnTheMapstedMap() {
-        // Create custom layout
-        View inflate = LayoutInflater.from(this).inflate(R.layout.sample_layout, null, false);
-        MapstedListView mapstedListView = (MapstedListView) inflate.findViewById(R.id.mylist);
-
-        // Set Data
-        List<Category> items = MyCategoryUtils.createCategoryList(mapUiApi);
-
-        // Create adapter and set layout manager
-        MapstedListAdapter adapter = new MapstedListAdapter(items, listener);
-        mapstedListView.setListViewAdapter(adapter);
-        String tag = "com.example.view.mylistviewtag";
-        myTag = mapUiApi.addViewToMap(tag, inflate);
     }
 
     private MapstedListAdapter.Listener<Category> listener = new MapstedListAdapter.Listener<Category>() {
