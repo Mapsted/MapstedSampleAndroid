@@ -34,21 +34,23 @@ public class MyCategoryUtils {
     public static List<Category> createCategoryList(MapUiApi sdk) {
         CoreApi coreApi = sdk.getMapApi().getCoreApi();
         List<Category> myCategories = new ArrayList<>();
-        /*CategoryTree categoryTree = coreApi.getGlobalCategoryTree();
-
-        String[] cateIds = new String[]{"c2d2-d24d-12085",
-                "c2d2-d24d-12086",
-                "c2d2-d24d-12087",
-                "c2d2-d24d-12093",
-                "c2d2-d24d-12096",
-                "c2d2-d24d-12090",
-                "c2d2-d24d-12100",
-                "c2d2-d24d-12101"};
-        for (String catId : cateIds) {
-            Category category = categoryTree.getCategory(catId);
-            Logger.v("categoryId %s -> %s", catId, category);
-            myCategories.add(category);
-        }*/
+//        CategoryTree categoryTree = coreApi.getGlobalCategoryTree();
+//
+//        String[] cateIds = new String[]{"c2d2-d24d-12085",
+//                "c2d2-d24d-12086",
+//                "c2d2-d24d-12087",
+//                "c2d2-d24d-12093",
+//                "c2d2-d24d-12096",
+//                "c2d2-d24d-12090",
+//                "c2d2-d24d-12100",
+//                "c2d2-d24d-12101"};
+//        for (String catId : cateIds) {
+//            Category category = categoryTree.getCategory(catId);
+//            if(category!=null) {
+//                Logger.v("categoryId %s -> %s", catId, category);
+//                myCategories.add(category);
+//            }
+//        }
         return myCategories;
     }
 }

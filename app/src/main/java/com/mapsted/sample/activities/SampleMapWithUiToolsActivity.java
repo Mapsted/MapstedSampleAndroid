@@ -14,13 +14,13 @@ import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
-import com.mapsted.positioning.core.utils.Logger;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
 import com.mapsted.ui.MapstedSdkController;
+
 
 
 public class SampleMapWithUiToolsActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
@@ -56,13 +56,12 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
         Log.i(TAG, "::setupMapstedSdk");
 
         CustomParams.newBuilder()
-                .setBaseMapStyle(BaseMapStyle.DEFAULT)
+                .setBaseMapStyle(BaseMapStyle.GREY)
                 .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
                 .setShowPropertyListOnMapLaunch(true)
                 .setEnablePropertyListSelection(true)
                 .setMapZoomRange(new MapstedMapRange(6.0f, 24.0f))
                 .build();
-
 
         sdk.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
 
@@ -75,7 +74,6 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
             public void onFailure(SdkError sdkError) {
                 Log.e(TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage);
             }
-
         });
     }
 
@@ -87,13 +85,15 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
 
     @Override
     public MapUiApi provideMapstedUiApi() {
+        if (sdk == null)
+            sdk = MapstedSdkController.newInstance(getApplicationContext());
         return sdk;
     }
 
     @Override
     public void onBackPressed() {
-        Logger.d("onBackPressed: ");
         super.onBackPressed();
+        Log.i(TAG, "::onBackPressed");
     }
 
     @Override

@@ -4,13 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
@@ -18,14 +14,12 @@ allprojects {
     repositories {
         google()
         jcenter()
-
         maven {
             url "http://mobilesdk.mapsted.com:8081/artifactory/gradle-mapsted"
             credentials {
                 username = "sdksample"
                 password = "Sample20!9"
             }
-
         }
 
     }

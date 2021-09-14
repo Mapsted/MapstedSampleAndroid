@@ -20,21 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.mapsted.sample.activities.SampleActivityWithFragment"
-            android:configChanges="locale|layoutDirection" />
-        <activity
-            android:name="com.mapsted.sample.activities.SampleMapWithUiToolsActivity"
-            android:configChanges="locale|layoutDirection" />
-        <activity
-            android:name="com.mapsted.sample.activities.SampleListActivity"
-            android:configChanges="locale|layoutDirection" />
-        <activity
-            android:name="com.mapsted.sample.activities.SampleMapWithAButtonActivity"
-            android:configChanges="locale|layoutDirection" />
-        <activity
-            android:name="com.mapsted.sample.activities.SampleMapWithListActivity"
-            android:configChanges="locale|layoutDirection" />
+        <activity android:name="com.mapsted.sample.activities.SampleActivityWithFragment" android:configChanges="locale|layoutDirection"/>
+        <activity android:name="com.mapsted.sample.activities.SampleMapWithUiToolsActivity" android:configChanges="locale|layoutDirection"/>
+        <activity android:name="com.mapsted.sample.activities.SampleMapWithAButtonActivity" android:configChanges="locale|layoutDirection"/>
+        <activity android:name="com.mapsted.sample.activities.SampleMapWithListActivity" android:configChanges="locale|layoutDirection"/>
     </application>
 
 </manifest>

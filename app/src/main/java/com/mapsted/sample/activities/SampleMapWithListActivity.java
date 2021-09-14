@@ -34,16 +34,12 @@ import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.network.property_metadata.model.Category;
 import com.mapsted.positioning.core.utils.common.Params;
-import com.mapsted.sample.MyCategoryUtils;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
 import com.mapsted.ui.MapstedSdkController;
 import com.mapsted.ui_components.list.MapstedListAdapter;
-import com.mapsted.ui_components.list.MapstedListView;
-
-import java.util.List;
 
 
 public class SampleMapWithListActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
@@ -111,20 +107,20 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
         super.onStop();
     }
 
-    void putListViewComponentOnTheMapstedMap() {
-        // Create custom layout
-        View inflate = LayoutInflater.from(this).inflate(R.layout.sample_layout, null, false);
-        MapstedListView mapstedListView = (MapstedListView) inflate.findViewById(R.id.mylist);
-
-        // Set Data
-        List<Category> items = MyCategoryUtils.createCategoryList(mapUiApi);
-
-        // Create adapter and set layout manager
-        MapstedListAdapter adapter = new MapstedListAdapter(items, listener);
-        mapstedListView.setListViewAdapter(adapter);
-        String tag = "com.example.view.mylistviewtag";
-        myTag = mapUiApi.addViewToMap(tag, inflate);
-    }
+//    void putListViewComponentOnTheMapstedMap() {
+//        // Create custom layout
+//        View inflate = LayoutInflater.from(this).inflate(R.layout.sample_layout, null, false);
+//        MapstedListView mapstedListView = (MapstedListView) inflate.findViewById(R.id.mylist);
+//
+//        // Set Data
+//        List<Category> items = MyCategoryUtils.createCategoryList(mapUiApi);
+//
+//        // Create adapter and set layout manager
+//        MapstedListAdapter<Category> adapter = new MapstedListAdapter(items, listener);
+//        mapstedListView.setListViewAdapter(adapter);
+//        String tag = "com.example.view.mylistviewtag";
+//        myTag = mapUiApi.addViewToMap(tag, inflate);
+//    }
 
     private MapstedListAdapter.Listener<Category> listener = new MapstedListAdapter.Listener<Category>() {
         @Override
@@ -149,7 +145,6 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
                     setParentCategory(item, imageView);
                     //Glide.with(getApplicationContext()).load(item.getImageGuid()).into(imageView);
 
-                    Log.d(TAG, "Guid: " + Params.imageUrl + item.getImageGuid());
 
                 }
             };
@@ -174,7 +169,7 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
                 ivCategoryImage.setImageDrawable(resource);
             }
         };
-        String imageUrl = Params.imageUrl + parentCategory.getImageGuid();
+        String imageUrl = "http://www.example.com/" + parentCategory.getImageGuid();
         Log.d(TAG, "setParentCategory: imageUrl=" + imageUrl);
         Glide.with(ivCategoryImage)
                 .load(imageUrl)

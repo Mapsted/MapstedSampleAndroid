@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapsted.sample.activities.SampleActivityWithFragment;
-import com.mapsted.sample.activities.SampleListActivity;
 import com.mapsted.sample.activities.SampleMapWithAButtonActivity;
 import com.mapsted.sample.activities.SampleMapWithListActivity;
 import com.mapsted.sample.activities.SampleMapWithUiToolsActivity;
@@ -24,10 +23,6 @@ public class SampleMainLaunchActivity extends AppCompatActivity {
             context.startActivity(intent);
         });
 
-        findViewById(R.id.btn_launch_list).setOnClickListener(v -> {
-            Intent intent = new Intent(context, SampleListActivity.class);
-            context.startActivity(intent);
-        });
 
         findViewById(R.id.btn_launch_map_with_button).setOnClickListener(v -> {
             Intent intent = new Intent(context, SampleMapWithAButtonActivity.class);

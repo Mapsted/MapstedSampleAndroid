@@ -11,21 +11,10 @@
         android:layout_height="@dimen/dp_48"
         android:layout_marginTop="216dp"
         android:text="Map with UI tools"
-        app:layout_constraintBottom_toTopOf="@+id/btn_launch_list"
+        app:layout_constraintBottom_toTopOf="@+id/btn_launch_map_with_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_launch_list"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_48"
-        android:layout_marginTop="16dp"
-        android:text="Mapsted ListView"
-        app:layout_constraintBottom_toTopOf="@+id/btn_launch_map_with_button"
-        app:layout_constraintEnd_toEndOf="@+id/btn_launch_map_with_tools"
-        app:layout_constraintStart_toStartOf="@+id/btn_launch_map_with_tools"
-        app:layout_constraintTop_toBottomOf="@+id/btn_launch_map_with_tools" />
 
     <Button
         android:id="@+id/btn_launch_map_with_button"
@@ -34,10 +23,10 @@
         android:layout_marginTop="16dp"
         android:text="Map with Custom Button"
         app:layout_constraintBottom_toTopOf="@+id/btn_launch_map_with_list"
-        app:layout_constraintEnd_toEndOf="@+id/btn_launch_list"
+        app:layout_constraintEnd_toEndOf="@+id/btn_launch_map_with_tools"
         app:layout_constraintStart_toEndOf="@+id/btn_launch_map_with_tools"
-        app:layout_constraintStart_toStartOf="@+id/btn_launch_list"
-        app:layout_constraintTop_toBottomOf="@+id/btn_launch_list" />
+        app:layout_constraintStart_toStartOf="@+id/btn_launch_map_with_tools"
+        app:layout_constraintTop_toBottomOf="@+id/btn_launch_map_with_tools" />
 
     <Button
         android:id="@+id/btn_launch_map_with_list"
