@@ -19,9 +19,11 @@ import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.sample.R;
+//import com.mapsted.template_core.ui.map.TemplateCoreMapFragment;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
+import com.mapsted.ui.map.MapFragment;
 
 public class SampleFragment extends Fragment {
 
@@ -70,9 +72,21 @@ public class SampleFragment extends Fragment {
     }
 
     private MapstedInitCallback mapstedInitCallback = new MapstedInitCallback() {
+
+        @Override
+        public void onCoreInitialized() {
+            Log.d(TAG, "onCoreInitialized: ");
+        }
+
+        @Override
+        public void onMapInitialized() {
+            Log.d(TAG, "onMapInitialized: ");
+        }
+
         @Override
         public void onSuccess() {
             Log.d(TAG, "onSuccess: ");
+             sdk.setSelectedFloor(-1);
         }
 
         @Override

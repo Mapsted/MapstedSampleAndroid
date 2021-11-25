@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/amitr/Desktop/AmitNew/MapStedRepo/sample_docs_app/app/src/main/res/layout/activity_sample_list.xml" value="0.11041666666666666" />
+        <entry key="..\:/Users/amitr/Desktop/AmitNew/MapStedRepo/sample_docs_app/app/src/main/res/layout/activity_sample_main.xml" value="0.11041666666666666" />
+        <entry key="..\:/Users/amitr/Desktop/AmitNew/MapStedRepo/sample_docs_app/app/src/main/res/layout/activity_sample_main_launch.xml" value="0.11041666666666666" />
+        <entry key="..\:/Users/amitr/Desktop/AmitNew/MapStedRepo/sample_docs_app/app/src/main/res/layout/sample_category_item_layout.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/amitr/Desktop/AmitNew/MapStedRepo/sample_docs_app/app/src/main/res/layout/sample_mapsted_list_viewlayout.xml" value="0.23802083333333332" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>
