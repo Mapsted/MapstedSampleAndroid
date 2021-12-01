@@ -11,8 +11,6 @@ For more information, please visit <a href="https://developer.mapsted.com/">Deve
 
 2. Based on your need, Open `Sample_Java_Project` for java project or `Sample_Kotlin_Project` for kotlin project in Android studio.
 
-3. Include the Mapsted licence file in the assets folder (Navigate as follows: view as "Project" on project files tree > "MapstedSampleAndroid" > app > src > main > assets).
-   _(A sample license is already included in Sample project. Therefore, please do this step in your project)_
 
 <h2>Links</h2>
 Developer Docs: https://developer.mapsted.com/
