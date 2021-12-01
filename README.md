@@ -6,15 +6,13 @@ For more information, please visit <a href="https://developer.mapsted.com/">Deve
 
 <h2>How to Set Up a Mapsted Sample Project for Android</h2>
 
-1. Clone the Android Mapsted Sample project to your local computer.
+1. Clone the Android Mapsted Sample project to your local computer. 
+   `git clone https://github.com/Mapsted/MapstedSampleAndroid` 
 
-2. Open Android Studio.
+2. Based on your need, Open `Sample_Java_Project` for java project or `Sample_Kotlin_Project` for kotlin project in Android studio.
 
-3. Import or open the Mapsted Android sample project.
+3. Include the Mapsted licence file in the assets folder (Navigate as follows: view as "Project" on project files tree > "MapstedSampleAndroid" > app > src > main > assets).
+   _(A sample license is already included in Sample project. Therefore, please do this step in your project)_
 
-4. Include the Mapsted licence file in the assets folder (Navigate as follows: view as "Project" on project files tree > "MapstedSampleAndroid" > app > src > main > assets).
-
-<h2>Site Map</h2>
-
+<h2>Links</h2>
 Developer Docs: https://developer.mapsted.com/
-<br/>API Reference: https://developer.mapsted.com/api-references/android/4.0.0/javadoc/
