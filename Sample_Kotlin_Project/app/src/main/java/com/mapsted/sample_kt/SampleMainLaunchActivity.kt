@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mapsted.sample_kt.activities.SampleActivityWithFragment
 import com.mapsted.sample_kt.activities.SampleMapWithAButtonActivity
-import com.mapsted.sample_kt.activities.SampleMapWithListActivity
 import com.mapsted.sample_kt.activities.SampleMapWithUiToolsActivity
 import com.mapsted.sample_kt.databinding.ActivitySampleMainLaunchBinding
 
@@ -25,11 +24,6 @@ class SampleMainLaunchActivity : AppCompatActivity() {
 
         binding.btnLaunchMapWithButton.setOnClickListener {
             val intent = Intent(context, SampleMapWithAButtonActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.btnLaunchMapWithList.setOnClickListener {
-            val intent = Intent(context, SampleMapWithListActivity::class.java)
             startActivity(intent)
         }
 

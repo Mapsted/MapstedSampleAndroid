@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.MapstedSample">
-        <activity
+        <activity android:exported="true"
             android:name="com.mapsted.sample_kt.SampleMainLaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +26,6 @@
             android:configChanges="locale|layoutDirection" />
         <activity
             android:name=".activities.SampleMapWithAButtonActivity"
-            android:configChanges="locale|layoutDirection" />
-        <activity
-            android:name=".activities.SampleMapWithListActivity"
             android:configChanges="locale|layoutDirection" />
     </application>
 </manifest>
