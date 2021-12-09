@@ -33,7 +33,6 @@ import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.network.property_metadata.model.Category;
-import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
@@ -89,22 +88,22 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
         mapUiApi.initializeMapstedSDK(this, fl_map_ui_tool, fl_map_content, new MapstedInitCallback() {
             @Override
             public void onCoreInitialized() {
-                Log.i(TAG, "::setupMapstedSdk ::onCoreInitialized");
+                Log.d(TAG, "onCoreInitialized: ");
             }
 
             @Override
             public void onMapInitialized() {
-                Log.i(TAG, "::setupMapstedSdk ::onMapInitialized");
+                Log.d(TAG, "onMapInitialized: ");
             }
 
             @Override
             public void onSuccess() {
-                Log.i(TAG, "::setupMapstedSdk ::onSuccess");
+                Log.d(TAG, "onSuccess: ");
             }
 
             @Override
             public void onFailure(SdkError sdkError) {
-                Log.e(TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage);
+                Log.d(TAG, "onFailure: "+sdkError);
             }
 
         });

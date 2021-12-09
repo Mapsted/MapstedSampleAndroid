@@ -20,9 +20,9 @@ public class SampleActivityWithFragment extends AppCompatActivity implements Map
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_with_fragment);
-        Fragment fragment = SampleFragment.newInstance("someparam");
+        Fragment fragment = SampleMapUiFragment.newInstance("someparam");
         mapUiApi = MapstedSdkController.newInstance(this);
-        String tag = SampleFragment.class.getName();
+        String tag = SampleMapUiFragment.class.getName();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, tag).commit();
     }
 

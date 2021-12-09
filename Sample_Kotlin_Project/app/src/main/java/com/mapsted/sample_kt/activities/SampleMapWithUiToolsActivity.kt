@@ -88,6 +88,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
 
                 override fun onMapInitialized() {
                     Log.i(TAG, "::setupMapstedSdk ::onMapInitialized")
+                    sdk!!.mapApi.selectPropertyAndDrawIfNeeded(123, null);
                 }
 
                 override fun onSuccess() {

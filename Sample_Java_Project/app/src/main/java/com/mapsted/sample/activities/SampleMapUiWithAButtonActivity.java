@@ -25,9 +25,9 @@ import com.mapsted.ui.MapstedMapUiApiProvider;
 import com.mapsted.ui.MapstedSdkController;
 
 
-public class SampleMapWithAButtonActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
+public class SampleMapUiWithAButtonActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
 
-    private static final String TAG = SampleMapWithAButtonActivity.class.getSimpleName();
+    private static final String TAG = SampleMapUiWithAButtonActivity.class.getSimpleName();
     private View rootView;
     private FrameLayout fl_map_content;
     private FrameLayout fl_map_ui_tool;
@@ -74,19 +74,19 @@ public class SampleMapWithAButtonActivity extends AppCompatActivity implements M
 
             @Override
             public void onCoreInitialized() {
-                Log.i(TAG, "::setupMapstedSdk ::onCoreInitialized");
+                //core initialized
             }
 
             @Override
             public void onMapInitialized() {
-                Log.i(TAG, "::setupMapstedSdk ::onMapInitialized");
+                //mapInitialized
             }
 
             @Override
             public void onSuccess() {
                 Log.i(TAG, "::setupMapstedSdk ::onSuccess");
                 String tag = "com.example.view.mybuttontag";
-                View inflate = LayoutInflater.from(SampleMapWithAButtonActivity.this).inflate(R.layout.sample_button, null, false);
+                View inflate = LayoutInflater.from(SampleMapUiWithAButtonActivity.this).inflate(R.layout.sample_button, null, false);
                 inflate.findViewById(R.id.btn_hello).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

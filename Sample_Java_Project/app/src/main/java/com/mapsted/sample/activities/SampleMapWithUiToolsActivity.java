@@ -67,22 +67,22 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
 
             @Override
             public void onCoreInitialized() {
-                Log.i(TAG, "::setupMapstedSdk ::onCoreInitialized");
+                Log.d(TAG, "onCoreInitialized: ");
             }
 
             @Override
             public void onMapInitialized() {
-                Log.i(TAG, "::setupMapstedSdk ::onMapInitialized");
+                Log.d(TAG, "onMapInitialized: ");
             }
 
             @Override
             public void onSuccess() {
-                Log.i(TAG, "::setupMapstedSdk ::onSuccess");
+                Log.d(TAG, "onSuccess: ");
             }
 
             @Override
             public void onFailure(SdkError sdkError) {
-                Log.e(TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage);
+                Log.d(TAG, "onFailure: ");
             }
         });
     }

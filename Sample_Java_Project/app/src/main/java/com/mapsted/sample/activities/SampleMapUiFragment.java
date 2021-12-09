@@ -13,34 +13,30 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
-import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.sample.R;
-//import com.mapsted.template_core.ui.map.TemplateCoreMapFragment;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
-import com.mapsted.ui.map.MapFragment;
 
-public class SampleFragment extends Fragment {
+public class SampleMapUiFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
 
-    private MapUiApi sdk;
-    private String TAG = SampleFragment.class.getSimpleName();
+    private MapUiApi mapUiApi;
+    private String TAG = SampleMapUiFragment.class.getSimpleName();
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         MapstedMapUiApiProvider  apiProvider = (MapstedMapUiApiProvider)context;
-        sdk = apiProvider.provideMapstedUiApi();
+        mapUiApi = apiProvider.provideMapstedUiApi();
     }
 
-    public static SampleFragment newInstance(String param1) {
-        SampleFragment fragment = new SampleFragment();
+    public static SampleMapUiFragment newInstance(String param1) {
+        SampleMapUiFragment fragment = new SampleMapUiFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -67,7 +63,7 @@ public class SampleFragment extends Fragment {
                 .setShowPropertyListOnMapLaunch(true)
                 .setEnablePropertyListSelection(true)
                 .build();
-        sdk.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
+        mapUiApi.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
 
     }
 
@@ -86,7 +82,7 @@ public class SampleFragment extends Fragment {
         @Override
         public void onSuccess() {
             Log.d(TAG, "onSuccess: ");
-             sdk.setSelectedFloor(-1);
+            mapUiApi.setSelectedFloor(-1);
         }
 
         @Override
@@ -98,7 +94,7 @@ public class SampleFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        sdk.onDestroy();
+        mapUiApi.onDestroy();
         super.onDestroy();
     }
 }
