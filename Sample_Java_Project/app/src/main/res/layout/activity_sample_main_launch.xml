@@ -50,4 +50,16 @@
         app:layout_constraintStart_toStartOf="@+id/btn_launch_map_with_list"
         app:layout_constraintTop_toBottomOf="@+id/btn_launch_map_with_list" />
 
+
+    <Button
+        android:id="@+id/btn_launch_map"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="16dp"
+        android:text="Map in fragment"
+        app:layout_constraintEnd_toEndOf="@+id/btn_launch_map_with_list"
+        app:layout_constraintStart_toStartOf="@+id/btn_launch_map_with_list"
+        app:layout_constraintTop_toBottomOf="@+id/btn_launch_map_with_list" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

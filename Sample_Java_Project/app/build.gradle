@@ -53,11 +53,11 @@ dependencies {
 
 
     // Server library
-    api("com.mapsted:app-template-mall:4.3.19")
-    api("com.mapsted:app-template-core:4.3.19")
-    api("com.mapsted:sdk-ui-components:4.3.19")
-    api("com.mapsted:sdk-map-ui:4.3.19")
-    api("com.mapsted:sdk-map:4.3.19")
-    api("com.mapsted:sdk-loc-marketing:4.3.19")
-    api("com.mapsted:sdk-core:4.3.19")
+    api("com.mapsted:app-template-mall:4+")
+    api("com.mapsted:app-template-core:4+")
+    api("com.mapsted:sdk-ui-components:4+")
+    api("com.mapsted:sdk-map-ui:4+")
+    api("com.mapsted:sdk-map:4+")
+    api("com.mapsted:sdk-loc-marketing:4+")
+    api("com.mapsted:sdk-core:4+")
 }

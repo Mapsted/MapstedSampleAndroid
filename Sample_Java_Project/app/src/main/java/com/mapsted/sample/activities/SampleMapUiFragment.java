@@ -13,32 +13,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
-import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.SdkError;
+import com.mapsted.positioning.core.utils.Logger;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
 
-public class SampleFragment extends Fragment {
+public class SampleMapUiFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
 
-    private MapUiApi sdk;
-    private String TAG = SampleFragment.class.getSimpleName();
+    private MapUiApi mapUiApi;
+    private String TAG = SampleMapUiFragment.class.getSimpleName();
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         MapstedMapUiApiProvider  apiProvider = (MapstedMapUiApiProvider)context;
-        sdk = apiProvider.provideMapstedUiApi();
+        mapUiApi = apiProvider.provideMapstedUiApi();
     }
 
-    public static SampleFragment newInstance(String param1) {
-        SampleFragment fragment = new SampleFragment();
+    public static SampleMapUiFragment newInstance(String param1) {
+        SampleMapUiFragment fragment = new SampleMapUiFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -65,11 +64,21 @@ public class SampleFragment extends Fragment {
                 .setShowPropertyListOnMapLaunch(true)
                 .setEnablePropertyListSelection(true)
                 .build();
-        sdk.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
+        mapUiApi.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
 
     }
 
     private MapstedInitCallback mapstedInitCallback = new MapstedInitCallback() {
+        @Override
+        public void onCoreInitialized() {
+            Log.d(TAG, "onCoreInitialized: ");
+        }
+
+        @Override
+        public void onMapInitialized() {
+            Log.d(TAG, "onMapInitialized: ");
+        }
+
         @Override
         public void onSuccess() {
             Log.d(TAG, "onSuccess: ");
@@ -84,7 +93,7 @@ public class SampleFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        sdk.onDestroy();
+        mapUiApi.onDestroy();
         super.onDestroy();
     }
 }
