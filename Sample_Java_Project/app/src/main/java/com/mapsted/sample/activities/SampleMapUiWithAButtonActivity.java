@@ -16,6 +16,7 @@ import com.mapsted.map.MapApi;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.R;
@@ -102,6 +103,11 @@ public class SampleMapUiWithAButtonActivity extends AppCompatActivity implements
             @Override
             public void onFailure(SdkError sdkError) {
                 Log.e(TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage);
+            }
+
+            @Override
+            public void onMessage(MessageType messageType, String s) {
+                Log.d(TAG, "onMessage: "+ s);
             }
         });
     }

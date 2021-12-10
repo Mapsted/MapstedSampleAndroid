@@ -13,6 +13,7 @@ import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.sample.R;
@@ -83,6 +84,11 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
             @Override
             public void onFailure(SdkError sdkError) {
                 Log.d(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onMessage(MessageType messageType, String s) {
+                Log.d(TAG, "onMessage: ");
             }
         });
     }

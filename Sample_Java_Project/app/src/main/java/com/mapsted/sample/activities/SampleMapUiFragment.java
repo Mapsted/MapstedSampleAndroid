@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
@@ -88,6 +89,11 @@ public class SampleMapUiFragment extends Fragment {
         @Override
         public void onFailure(SdkError sdkError) {
             Log.e(TAG, "onFailure: " + sdkError.errorMessage);
+        }
+
+        @Override
+        public void onMessage(MessageType messageType, String s) {
+            Log.d(TAG, "onMessage: " + s);
         }
 
     };

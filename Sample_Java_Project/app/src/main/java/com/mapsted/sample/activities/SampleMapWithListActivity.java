@@ -31,6 +31,7 @@ import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MapstedInitCallback;
+import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.network.property_metadata.model.Category;
 import com.mapsted.sample.R;
@@ -104,6 +105,11 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
             @Override
             public void onFailure(SdkError sdkError) {
                 Log.d(TAG, "onFailure: "+sdkError);
+            }
+
+            @Override
+            public void onMessage(MessageType messageType, String s) {
+                Log.d(TAG, "onMessage: " + s);
             }
 
         });
