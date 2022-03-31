@@ -3,13 +3,16 @@ package com.mapsted.sample_kt.activities
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.mapsted.map.MapApi
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
 import com.mapsted.positioning.MapstedInitCallback
+import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
 import com.mapsted.sample_kt.R
@@ -18,8 +21,11 @@ import com.mapsted.ui.CustomParams
 import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
+import com.mapsted.ui.map.routing.StepsFragment
+import com.mapsted.ui.search.SearchCallbacksProvider
 
-class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider {
+class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
+    SearchCallbacksProvider, StepsFragment.Listener {
 
     private val TAG: String = SampleMapWithUiToolsActivity::class.java.simpleName
     private lateinit var mBinding: ActivitySampleMainBinding
@@ -31,7 +37,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sample_main)
         sdk = MapstedSdkController.newInstance(applicationContext)
-        mapApi = sdk?.getMapApi()
+        mapApi = sdk?.mapApi
         Params.initialize(this)
         setupMapstedSdk()
     }
@@ -77,18 +83,16 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
 
-        sdk!!.initializeMapstedSDK(
+        sdk?.initializeMapstedSDK(
             this,
             mBinding.myMapUiTool,
-            mBinding.myMapContainer,
-            object : MapstedInitCallback {
+            mBinding.myMapContainer, object : MapstedInitCallback {
                 override fun onCoreInitialized() {
                     Log.i(TAG, "::setupMapstedSdk ::onCoreInitialized")
                 }
 
                 override fun onMapInitialized() {
                     Log.i(TAG, "::setupMapstedSdk ::onMapInitialized")
-                    sdk!!.mapApi.selectPropertyAndDrawIfNeeded(123, null);
                 }
 
                 override fun onSuccess() {
@@ -96,10 +100,32 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                 }
 
                 override fun onFailure(sdkError: SdkError) {
-                    Log.e(
-                        TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage
-                    )
+                    Log.e(TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage)
+                }
+
+                override fun onMessage(p0: MessageType?, p1: String?) {
+                    Log.d(TAG, "::onMessage: $p1");
                 }
             })
+    }
+
+    override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
+    }
+
+    override fun getSearchFeedCallback(): SearchCallbacksProvider.SearchFeedCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
+    }
+
+    override fun getSearchAlertCallback(): SearchCallbacksProvider.SearchAlertCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
+    }
+
+    override fun getAlertsFragment(p0: MutableList<String>?): Fragment? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
     }
 }

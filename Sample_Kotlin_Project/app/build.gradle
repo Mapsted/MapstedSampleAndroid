@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.mapsted.sample_kt"
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -43,26 +43,18 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01'
+    annotationProcessor 'androidx.room:room-compiler:2.3.0-rc01'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    annotationProcessor 'androidx.databinding:databinding-compiler:3.4.2'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.32"
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.4.0"
-
-    annotationProcessor("androidx.databinding:databinding-compiler:4.1.3")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
-    annotationProcessor("androidx.room:room-compiler:2.3.0-rc01")
-
-    implementation 'com.android.support:multidex:1.0.3'
 
     //Mapsted
-    implementation 'com.mapsted:sdk-ui-components:4.5+'
-    implementation 'com.mapsted:sdk-map-ui:4.5+'
-    implementation 'com.mapsted:sdk-map:4.5+'
-    implementation 'com.mapsted:sdk-core:4.5+'
+    implementation 'com.mapsted:sdk-ui-components:4.5.+'
+    implementation 'com.mapsted:sdk-map-ui:4.5.+'
+    implementation 'com.mapsted:sdk-map:4.5.+'
+    implementation 'com.mapsted:sdk-core:4.5.+'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

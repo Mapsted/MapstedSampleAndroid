@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mapsted.map.views.MapPanType
 import com.mapsted.positioning.MapstedInitCallback
+import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.sample_kt.databinding.FragmentSampleBinding
 import com.mapsted.ui.CustomParams
@@ -85,6 +86,10 @@ class SampleFragment : Fragment() {
 
         override fun onFailure(sdkError: SdkError) {
             Log.e(TAG, "onFailure: " + sdkError.errorMessage)
+        }
+
+        override fun onMessage(messageType: MessageType?, s: String?) {
+            Log.d(TAG,"onMessage: s")
         }
     }
 

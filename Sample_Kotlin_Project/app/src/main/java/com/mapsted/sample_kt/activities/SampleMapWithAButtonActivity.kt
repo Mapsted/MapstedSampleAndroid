@@ -5,13 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.mapsted.map.MapApi
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
 import com.mapsted.positioning.MapstedInitCallback
+import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
 import com.mapsted.sample_kt.R
@@ -20,8 +23,11 @@ import com.mapsted.ui.CustomParams
 import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
+import com.mapsted.ui.map.routing.StepsFragment
+import com.mapsted.ui.search.SearchCallbacksProvider
 
-class SampleMapWithAButtonActivity : AppCompatActivity(), MapstedMapUiApiProvider {
+class SampleMapWithAButtonActivity : AppCompatActivity(), MapstedMapUiApiProvider ,
+    SearchCallbacksProvider, StepsFragment.Listener{
 
     private val TAG = SampleMapWithAButtonActivity::class.java.simpleName
     private lateinit var mBinding: ActivitySampleMainBinding
@@ -101,6 +107,30 @@ class SampleMapWithAButtonActivity : AppCompatActivity(), MapstedMapUiApiProvide
                         "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage
                     )
                 }
+
+                override fun onMessage(p0: MessageType?, p1: String?) {
+                    Log.d(TAG, "$p1")
+                }
             })
+    }
+
+    override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
+    }
+
+    override fun getSearchFeedCallback(): SearchCallbacksProvider.SearchFeedCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
+    }
+
+    override fun getSearchAlertCallback(): SearchCallbacksProvider.SearchAlertCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
+    }
+
+    override fun getAlertsFragment(p0: MutableList<String>?): Fragment? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
+        return null
     }
 }
