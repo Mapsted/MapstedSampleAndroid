@@ -53,8 +53,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.mapsted:sdk-ui-components:4.5.7'
-    implementation 'com.mapsted:sdk-map-ui:4.5.7'
-    implementation 'com.mapsted:sdk-map:4.5.7'
-    implementation 'com.mapsted:sdk-core:4.5.7'
+    implementation 'com.mapsted:sdk-ui-components:4.5.+'
+    implementation 'com.mapsted:sdk-map-ui:4.5.+'
+    implementation 'com.mapsted:sdk-map:4.5.+'
+    implementation 'com.mapsted:sdk-core:4.5.+'
 }

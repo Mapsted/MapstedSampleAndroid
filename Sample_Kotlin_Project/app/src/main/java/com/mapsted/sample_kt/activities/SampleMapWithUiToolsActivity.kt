@@ -10,6 +10,7 @@ import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
 import com.mapsted.positioning.MapstedInitCallback
+import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
 import com.mapsted.sample_kt.R
@@ -96,9 +97,11 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                 }
 
                 override fun onFailure(sdkError: SdkError) {
-                    Log.e(
-                        TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage
-                    )
+                    Log.e(TAG, "::setupMapstedSdk ::onFailure message=" + sdkError.errorMessage)
+                }
+
+                override fun onMessage(p0: MessageType?, p1: String?) {
+                    Log.d(TAG, "::onMessage: $p1");
                 }
             })
     }
