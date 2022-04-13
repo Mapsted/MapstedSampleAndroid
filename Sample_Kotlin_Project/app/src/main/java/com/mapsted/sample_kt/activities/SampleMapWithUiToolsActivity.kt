@@ -32,7 +32,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sample_main)
         sdk = MapstedSdkController.newInstance(applicationContext)
-        mapApi = sdk?.getMapApi()
+        mapApi = sdk?.mapApi
         Params.initialize(this)
         setupMapstedSdk()
     }
@@ -78,18 +78,16 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
 
-        sdk!!.initializeMapstedSDK(
+        sdk?.initializeMapstedSDK(
             this,
             mBinding.myMapUiTool,
-            mBinding.myMapContainer,
-            object : MapstedInitCallback {
+            mBinding.myMapContainer, object : MapstedInitCallback {
                 override fun onCoreInitialized() {
                     Log.i(TAG, "::setupMapstedSdk ::onCoreInitialized")
                 }
 
                 override fun onMapInitialized() {
                     Log.i(TAG, "::setupMapstedSdk ::onMapInitialized")
-                    sdk!!.mapApi.selectPropertyAndDrawIfNeeded(123, null);
                 }
 
                 override fun onSuccess() {
