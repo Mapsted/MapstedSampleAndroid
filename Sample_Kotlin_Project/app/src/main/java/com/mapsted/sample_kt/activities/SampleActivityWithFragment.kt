@@ -2,6 +2,7 @@ package com.mapsted.sample_kt.activities
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -10,8 +11,10 @@ import com.mapsted.sample_kt.databinding.ActivitySampleWithFragmentBinding
 import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
+import com.mapsted.ui.search.SearchCallbacksProvider
 
-class SampleActivityWithFragment : AppCompatActivity(), MapstedMapUiApiProvider {
+class SampleActivityWithFragment : AppCompatActivity(), MapstedMapUiApiProvider,
+    SearchCallbacksProvider {
 
     private lateinit var mapUiApi: MapUiApi
     private lateinit var mBinding: ActivitySampleWithFragmentBinding
@@ -47,5 +50,20 @@ class SampleActivityWithFragment : AppCompatActivity(), MapstedMapUiApiProvider 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         mapUiApi.onConfigurationChanged(this, newConfig)
+    }
+
+    override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        return null;
+    }
+
+    override fun getSearchFeedCallback(): SearchCallbacksProvider.SearchFeedCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        return null;
+    }
+
+    override fun getSearchAlertCallback(): SearchCallbacksProvider.SearchAlertCallback? {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        return null;
     }
 }

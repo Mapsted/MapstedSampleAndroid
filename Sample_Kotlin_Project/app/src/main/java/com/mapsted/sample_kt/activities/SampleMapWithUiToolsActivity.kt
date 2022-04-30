@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.mapsted.map.MapApi
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
@@ -21,11 +20,9 @@ import com.mapsted.ui.CustomParams
 import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
-import com.mapsted.ui.map.routing.StepsFragment
 import com.mapsted.ui.search.SearchCallbacksProvider
 
-class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
-    SearchCallbacksProvider, StepsFragment.Listener {
+class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider , SearchCallbacksProvider{
 
     private val TAG: String = SampleMapWithUiToolsActivity::class.java.simpleName
     private lateinit var mBinding: ActivitySampleMainBinding
@@ -110,22 +107,17 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     }
 
     override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
-        return null
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        return null;
     }
 
     override fun getSearchFeedCallback(): SearchCallbacksProvider.SearchFeedCallback? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
-        return null
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        return null;
     }
 
     override fun getSearchAlertCallback(): SearchCallbacksProvider.SearchAlertCallback? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
-        return null
-    }
-
-    override fun getAlertsFragment(p0: MutableList<String>?): Fragment? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
-        return null
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        return null;
     }
 }
