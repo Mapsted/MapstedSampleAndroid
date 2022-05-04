@@ -2,8 +2,10 @@ package com.mapsted.sample.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -11,8 +13,9 @@ import com.mapsted.sample.R;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
 import com.mapsted.ui.MapstedSdkController;
+import com.mapsted.ui.search.SearchCallbacksProvider;
 
-public class SampleActivityWithFragment extends AppCompatActivity implements MapstedMapUiApiProvider {
+public class SampleActivityWithFragment extends AppCompatActivity implements MapstedMapUiApiProvider, SearchCallbacksProvider {
 
     private MapUiApi mapUiApi;
 
@@ -42,5 +45,26 @@ public class SampleActivityWithFragment extends AppCompatActivity implements Map
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mapUiApi.onConfigurationChanged(this, newConfig);
+    }
+
+    @Nullable
+    @Override
+    public SearchCoreSdkCallback getSearchCoreSdkCallback() {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show();
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public SearchFeedCallback getSearchFeedCallback() {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show();
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public SearchAlertCallback getSearchAlertCallback() {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show();
+        return null;
     }
 }

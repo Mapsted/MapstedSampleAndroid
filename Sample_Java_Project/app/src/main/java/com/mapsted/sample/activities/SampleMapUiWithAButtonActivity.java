@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -24,9 +26,10 @@ import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
 import com.mapsted.ui.MapstedSdkController;
+import com.mapsted.ui.search.SearchCallbacksProvider;
 
 
-public class SampleMapUiWithAButtonActivity extends AppCompatActivity implements MapstedMapUiApiProvider {
+public class SampleMapUiWithAButtonActivity extends AppCompatActivity implements MapstedMapUiApiProvider , SearchCallbacksProvider {
 
     private static final String TAG = SampleMapUiWithAButtonActivity.class.getSimpleName();
     private View rootView;
@@ -135,5 +138,26 @@ public class SampleMapUiWithAButtonActivity extends AppCompatActivity implements
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mapUiApi.onConfigurationChanged(this, newConfig);
+    }
+
+    @Nullable
+    @Override
+    public SearchCoreSdkCallback getSearchCoreSdkCallback() {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show();
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public SearchFeedCallback getSearchFeedCallback() {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show();
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public SearchAlertCallback getSearchAlertCallback() {
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show();
+        return null;
     }
 }

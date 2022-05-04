@@ -107,17 +107,17 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     }
 
     override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
         return null;
     }
 
     override fun getSearchFeedCallback(): SearchCallbacksProvider.SearchFeedCallback? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
         return null;
     }
 
     override fun getSearchAlertCallback(): SearchCallbacksProvider.SearchAlertCallback? {
-        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
+        Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
         return null;
     }
 }
