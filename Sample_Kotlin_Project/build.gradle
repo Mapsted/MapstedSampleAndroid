@@ -14,8 +14,7 @@ allprojects {
         google()
         jcenter()
         maven {
-            url "http://mobilesdk.mapsted.com:8081/artifactory/gradle-mapsted"
-            allowInsecureProtocol = true
+            url "https://mobilesdk.mapsted.com:8443/artifactory/gradle-mapsted"
         }
     }
 }
