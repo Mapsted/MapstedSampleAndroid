@@ -10,14 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mapsted.corepositioning.cppObjects.swig.EntityZone;
 import com.mapsted.map.MapApi;
 import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
+import com.mapsted.positioning.CoreApi;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
+import com.mapsted.positioning.coreObjects.SearchEntity;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
@@ -62,7 +65,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
                 .setBaseMapStyle(BaseMapStyle.GREY)
                 .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
                 .setShowPropertyListOnMapLaunch(true)
-                .setEnablePropertyListSelection(true)
+//                .setEnablePropertyListSelection(true)
                 .setMapZoomRange(new MapstedMapRange(6.0f, 24.0f))
                 .build();
 
@@ -81,6 +84,16 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSuccess: ");
+                int propertyId = 504;
+                mapApi.selectPropertyAndDrawIfNeeded(propertyId, new MapApi.DefaultSelectPropertyListener() {
+                    @Override
+                    public void onPlotted(boolean isSuccess, int propertyId) {
+                        Log.d(TAG, "onPlotted: propertyId=" + propertyId + " success=" + isSuccess);
+                        super.onPlotted(isSuccess, propertyId);
+                        selectAnEntityOnMap();
+                    }
+                });
+
             }
 
             @Override
@@ -90,7 +103,32 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
 
             @Override
             public void onMessage(MessageType messageType, String s) {
-                Log.d(TAG, "onMessage: ");
+                Log.d(TAG, "onMessage: " + s);
+            }
+        });
+    }
+
+    private void selectAnEntityOnMap() {
+        Log.d(TAG, "selectAnEntityOnMap: ");
+        CoreApi coreApi = sdk.getMapApi().getCoreApi();
+        Integer propertyId = mapApi.getSelectedPropertyId();
+        Toast.makeText(this, "Selecting Gap store on map", Toast.LENGTH_LONG).show();
+
+        coreApi.propertyManager().findEntityByName("Gap", propertyId, filteredResult -> {
+            if (filteredResult.size() > 0) {
+                SearchEntity searchEntity = filteredResult.get(0);
+                //while it may have multiple entityZones if it spans multiple floors, we will select the first one.
+                EntityZone entityZone = searchEntity.getEntityZones().get(0);
+                coreApi.propertyManager().getEntity(entityZone, entity -> {
+                    Log.d(TAG, "selectAnEntityOnMap: " + entity);
+                    mapApi.selectEntity(entity, selected -> {
+                        if (selected != null) {
+                            Log.d(TAG, "selectAnEntityOnMap: selected " + selected + " success");
+                        } else {
+                            Log.d(TAG, "selectAnEntityOnMap: entity selection failed");
+                        }
+                    });
+                });
             }
         });
     }
