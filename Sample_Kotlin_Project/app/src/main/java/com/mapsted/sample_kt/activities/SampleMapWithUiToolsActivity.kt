@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mapsted.map.MapApi
+import com.mapsted.map.MapApi.DefaultSelectPropertyListener
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
@@ -14,6 +15,8 @@ import com.mapsted.positioning.MapstedInitCallback
 import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
+import com.mapsted.positioning.coreObjects.Entity
+import com.mapsted.positioning.coreObjects.SearchEntity
 import com.mapsted.sample_kt.R
 import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
 import com.mapsted.ui.CustomParams
@@ -22,7 +25,8 @@ import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
 import com.mapsted.ui.search.SearchCallbacksProvider
 
-class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider , SearchCallbacksProvider{
+class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
+    SearchCallbacksProvider {
 
     private val TAG: String = SampleMapWithUiToolsActivity::class.java.simpleName
     private lateinit var mBinding: ActivitySampleMainBinding
@@ -76,7 +80,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(true)
-            .setEnablePropertyListSelection(true)
+//            .setEnablePropertyListSelection(true)
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
 
@@ -94,6 +98,16 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
 
                 override fun onSuccess() {
                     Log.i(TAG, "::setupMapstedSdk ::onSuccess")
+                    val propertyId = 504
+                    mapApi!!.selectPropertyAndDrawIfNeeded(
+                        propertyId,
+                        object : DefaultSelectPropertyListener() {
+                            override fun onPlotted(isSuccess: Boolean, propertyId: Int) {
+                                Log.d(TAG, "onPlotted: propertyId=$propertyId success=$isSuccess")
+                                super.onPlotted(isSuccess, propertyId)
+                                selectAnEntityOnMap()
+                            }
+                        })
                 }
 
                 override fun onFailure(sdkError: SdkError) {
@@ -104,6 +118,35 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                     Log.d(TAG, "::onMessage: $p1");
                 }
             })
+    }
+
+    private fun selectAnEntityOnMap() {
+        Log.d(TAG, "selectAnEntityOnMap: ")
+        val coreApi = sdk!!.mapApi.coreApi
+        val propertyId = mapApi!!.selectedPropertyId
+        Toast.makeText(this, "Selecting Gap store on map", Toast.LENGTH_LONG).show()
+        coreApi.propertyManager()
+            .findEntityByName("Gap", propertyId!!) { filteredResult: List<SearchEntity> ->
+                if (filteredResult.isNotEmpty()) {
+                    val searchEntity = filteredResult[0]
+                    //while it may have multiple entityZones if it spans multiple floors, we will select the first one.
+                    val entityZone = searchEntity.entityZones[0]
+                    coreApi.propertyManager().getEntity(
+                        entityZone
+                    ) { entity: Entity ->
+                        Log.d(TAG, "selectAnEntityOnMap: $entity")
+                        mapApi!!.selectEntity(
+                            entity
+                        ) { selected: Entity? ->
+                            if (selected != null) {
+                                Log.d(TAG, "selectAnEntityOnMap: selected $selected success")
+                            } else {
+                                Log.d(TAG, "selectAnEntityOnMap: entity selection failed")
+                            }
+                        }
+                    }
+                }
+            }
     }
 
     override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
