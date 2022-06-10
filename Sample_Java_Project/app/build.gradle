@@ -32,7 +32,7 @@ android {
     }
 
     configurations {
-        implementation.exclude group: 'org.jetbrains', module: 'annotations'
+        implementation.exclude group: 'com.intellij', module: 'annotations'
     }
 
     packagingOptions {
