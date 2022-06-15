@@ -31,9 +31,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    configurations {
-        implementation.exclude group: 'com.intellij', module: 'annotations'
-    }
+//    configurations {
+//        implementation.exclude group: 'com.intellij', module: 'annotations'
+//    }
 
     packagingOptions {
         exclude 'META-INF/gradle/incremental.annotation.processors'
