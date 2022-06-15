@@ -30,9 +30,9 @@ android {
         dataBinding true
     }
 
-    configurations {
-        implementation.exclude group: 'com.intellij', module: 'annotations'
-    }
+//    configurations {
+//        implementation.exclude group: 'com.intellij', module: 'annotations'
+//    }
 
     // Temporary fix until alpha10
     packagingOptions {
@@ -45,17 +45,18 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01'
-    annotationProcessor 'androidx.room:room-compiler:2.3.0-rc01'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     annotationProcessor 'androidx.databinding:databinding-compiler:3.4.2'
-
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
     implementation 'androidx.core:core-ktx:1.7.0'
 
     //Mapsted
-    implementation 'com.mapsted:sdk-ui-components:4.6.+'
-    implementation 'com.mapsted:sdk-map-ui:4.6.+'
-    implementation 'com.mapsted:sdk-map:4.6.+'
-    implementation 'com.mapsted:sdk-core:4.6.+'
+    def mapstedSdkVersion = "4.6.5.5";
+    implementation "com.mapsted:sdk-ui-components:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-map-ui:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-map:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-core:$mapstedSdkVersion"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
