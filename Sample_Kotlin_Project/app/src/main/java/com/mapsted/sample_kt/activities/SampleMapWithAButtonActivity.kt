@@ -125,4 +125,9 @@ class SampleMapWithAButtonActivity : AppCompatActivity(), MapstedMapUiApiProvide
         Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT)
         return null;
     }
+
+    override fun onDestroy() {
+        mapUiApi!!.onDestroy()
+        super.onDestroy()
+    }
 }
