@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapsted.corepositioning.cppObjects.swig.EntityZone;
 import com.mapsted.map.MapApi;
+import com.mapsted.map.MapSelectionChangeListener;
 import com.mapsted.map.models.layers.BaseMapStyle;
 import com.mapsted.map.views.MapPanType;
 import com.mapsted.map.views.MapstedMapRange;
@@ -121,13 +122,28 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
                 EntityZone entityZone = searchEntity.getEntityZones().get(0);
                 coreApi.propertyManager().getEntity(entityZone, entity -> {
                     Log.d(TAG, "selectAnEntityOnMap: " + entity);
-                    mapApi.selectEntity(entity, selected -> {
-                        if (selected != null) {
-                            Log.d(TAG, "selectAnEntityOnMap: selected " + selected + " success");
-                        } else {
-                            Log.d(TAG, "selectAnEntityOnMap: entity selection failed");
+                    mapApi.addMapSelectionChangeListener(new MapSelectionChangeListener() {
+                        @Override
+                        public void onPropertySelectionChange(int propertyId, int previousPropertyId) {
+                            Log.d(TAG, "onPropertySelectionChange: propertyId " + propertyId + ", previous " + previousPropertyId);
+                        }
+
+                        @Override
+                        public void onBuildingSelectionChange(int propertyId, int buildingId, int previousBuildingId) {
+                            Log.d(TAG, "onBuildingSelectionChange: propertyId " + propertyId + ", buildingId " + buildingId + ", previousBuildingId " + previousBuildingId);
+                        }
+
+                        @Override
+                        public void onFloorSelectionChange(int buildingId, int floorId) {
+                            Log.d(TAG, "onFloorSelectionChange: buildingId " + buildingId + ", floorId " + floorId);
+                        }
+
+                        @Override
+                        public void onEntitySelectionChange(int entityId) {
+                            Log.d(TAG, "onEntitySelectionChange: entityId " + entityId);
                         }
                     });
+                    mapApi.selectEntity(entity);
                 });
             }
         });
