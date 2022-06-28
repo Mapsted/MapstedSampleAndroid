@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mapsted.map.MapApi
 import com.mapsted.map.MapApi.DefaultSelectPropertyListener
+import com.mapsted.map.MapSelectionChangeListener
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
@@ -123,6 +124,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     private fun selectAnEntityOnMap() {
         Log.d(TAG, "selectAnEntityOnMap: ")
         val coreApi = sdk!!.mapApi.coreApi
+
         val propertyId = mapApi!!.selectedPropertyId
         Toast.makeText(this, "Selecting Gap store on map", Toast.LENGTH_LONG).show()
         coreApi.propertyManager()
@@ -135,15 +137,29 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                         entityZone
                     ) { entity: Entity ->
                         Log.d(TAG, "selectAnEntityOnMap: $entity")
-                        mapApi!!.selectEntity(
-                            entity
-                        ) { selected: Entity? ->
-                            if (selected != null) {
-                                Log.d(TAG, "selectAnEntityOnMap: selected $selected success")
-                            } else {
-                                Log.d(TAG, "selectAnEntityOnMap: entity selection failed")
+                        mapApi!!.addMapSelectionChangeListener(object : MapSelectionChangeListener {
+                            override fun onPropertySelectionChange(
+                                propertyId: Int,
+                                previousPropertyId: Int
+                            ) {
+                                Log.d(TAG, "onPropertySelectionChange: propertyId $propertyId, previousPropertyId $previousPropertyId")
                             }
-                        }
+
+                            override fun onBuildingSelectionChange(
+                                propertyId: Int, buildingId: Int, previousBuildingId: Int
+                            ) {
+                                Log.d(TAG, "onBuildingSelectionChange: propertyId $propertyId, buildingId $buildingId, previousBuildingId $previousBuildingId")
+                            }
+
+                            override fun onFloorSelectionChange(buildingId: Int, floorId: Int) {
+                                Log.d(TAG, "onFloorSelectionChange: buildingId $buildingId, floorId $floorId")
+                            }
+
+                            override fun onEntitySelectionChange(entityId: Int) {
+                                Log.d(TAG, "onEntitySelectionChange: entityId $entityId")
+                            }
+                        })
+                        mapApi!!.selectEntity(entity);
                     }
                 }
             }
