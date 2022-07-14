@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.mapsted.corepositioning.cppObjects.swig.CppRouteResponse
 import com.mapsted.map.MapApi
 import com.mapsted.map.MapApi.DefaultSelectPropertyListener
 import com.mapsted.map.MapSelectionChangeListener
@@ -16,8 +17,7 @@ import com.mapsted.positioning.MapstedInitCallback
 import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
-import com.mapsted.positioning.coreObjects.Entity
-import com.mapsted.positioning.coreObjects.SearchEntity
+import com.mapsted.positioning.coreObjects.*
 import com.mapsted.sample_kt.R
 import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
 import com.mapsted.ui.CustomParams
@@ -25,6 +25,8 @@ import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
 import com.mapsted.ui.search.SearchCallbacksProvider
+import com.mapsted.ui.searchables_list.SearchablesListFragment
+
 
 class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     SearchCallbacksProvider {
@@ -81,7 +83,6 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(true)
-//            .setEnablePropertyListSelection(true)
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
 
@@ -91,6 +92,13 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
             mBinding.myMapContainer, object : MapstedInitCallback {
                 override fun onCoreInitialized() {
                     Log.i(TAG, "::setupMapstedSdk ::onCoreInitialized")
+                    sdk!!.mapApi.coreApi.propertyManager().getCategories(504) {
+                        Log.d(TAG, "onCoreInitialized: ${it.rootCategories.size}")
+                        Log.d(TAG, "onCoreInitialized: ${it.allCategories.size}")
+                    }
+                    sdk!!.mapApi.coreApi.propertyManager().searchPoi(823, null) {
+                        showSearchableListFragment(it);
+                    }
                 }
 
                 override fun onMapInitialized() {
@@ -107,8 +115,15 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                                 Log.d(TAG, "onPlotted: propertyId=$propertyId success=$isSuccess")
                                 super.onPlotted(isSuccess, propertyId)
                                 selectAnEntityOnMap()
+
+                                sdk?.mapApi?.coreApi?.propertyManager()
+                                    ?.findEntityByName("Gap", 504) {
+                                        val iSearchable = it[0]
+                                        showRoutingPreview(iSearchable);
+                                    }
                             }
                         })
+
                 }
 
                 override fun onFailure(sdkError: SdkError) {
@@ -119,6 +134,39 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                     Log.d(TAG, "::onMessage: $p1");
                 }
             })
+    }
+
+    private fun showSearchableListFragment(searchableList: List<ISearchable>) {
+        searchableList.forEach{
+            it.entityZones.forEach {
+                Log.d(TAG, "showSearchableListFragment: " + it.location)
+            }
+        }
+        val searchablesListFragment = SearchablesListFragment.newInstance("MyTitle", searchableList)
+        supportFragmentManager.beginTransaction().add(R.id.container, searchablesListFragment)
+            .commit();
+    }
+
+    private fun showRoutingPreview(iSearchable: ISearchable) {
+        Log.d(TAG, "showRoutingPreview: ")
+
+        val waypoint1 = WaypointHelper.from(iSearchable)
+        val routeRequest = RouteRequest.Builder()
+            .addDestinationWaypoint(waypoint1)
+            .build();
+        sdk?.mapApi?.requestRouting(routeRequest, object : RoutingRequestCallback {
+            override fun onSuccess(routeResponse: RoutingResponse?) {
+                sdk?.mapFragment?.showRoutePreviewFragment(routeResponse)
+            }
+
+            override fun onError(
+                errorType: CppRouteResponse.ErrorType?,
+                error: String?,
+                alertIds: MutableList<String>?
+            ) {
+                Log.d(TAG, "onError: errorType $errorType $error")
+            }
+        })
     }
 
     private fun selectAnEntityOnMap() {
@@ -142,17 +190,26 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                                 propertyId: Int,
                                 previousPropertyId: Int
                             ) {
-                                Log.d(TAG, "onPropertySelectionChange: propertyId $propertyId, previousPropertyId $previousPropertyId")
+                                Log.d(
+                                    TAG,
+                                    "onPropertySelectionChange: propertyId $propertyId, previousPropertyId $previousPropertyId"
+                                )
                             }
 
                             override fun onBuildingSelectionChange(
                                 propertyId: Int, buildingId: Int, previousBuildingId: Int
                             ) {
-                                Log.d(TAG, "onBuildingSelectionChange: propertyId $propertyId, buildingId $buildingId, previousBuildingId $previousBuildingId")
+                                Log.d(
+                                    TAG,
+                                    "onBuildingSelectionChange: propertyId $propertyId, buildingId $buildingId, previousBuildingId $previousBuildingId"
+                                )
                             }
 
                             override fun onFloorSelectionChange(buildingId: Int, floorId: Int) {
-                                Log.d(TAG, "onFloorSelectionChange: buildingId $buildingId, floorId $floorId")
+                                Log.d(
+                                    TAG,
+                                    "onFloorSelectionChange: buildingId $buildingId, floorId $floorId"
+                                )
                             }
 
                             override fun onEntitySelectionChange(entityId: Int) {

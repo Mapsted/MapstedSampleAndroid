@@ -1,48 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_launch_map_with_tools"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_48"
-            android:layout_marginTop="216dp"
-            android:text="Map with UI tools"
-            app:layout_constraintBottom_toTopOf="@+id/btn_launch_map_with_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            android:text="Map with UI tools" />
+
+        <Button
+            android:id="@+id/btn_launch_poi_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch poi list" />
 
         <Button
             android:id="@+id/btn_launch_map_with_button"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_48"
-            android:layout_marginTop="16dp"
-            android:text="Map with Custom Button"
-            app:layout_constraintBottom_toTopOf="@+id/btn_launch_activity_with_fragment"
-            app:layout_constraintEnd_toEndOf="@+id/btn_launch_map_with_tools"
-            app:layout_constraintStart_toEndOf="@+id/btn_launch_map_with_tools"
-            app:layout_constraintStart_toStartOf="@+id/btn_launch_map_with_tools"
-            app:layout_constraintTop_toBottomOf="@+id/btn_launch_map_with_tools" />
-
-
-
-
+            android:layout_height="wrap_content"
+            android:text="Map with Custom Button" />
 
         <Button
             android:id="@+id/btn_launch_activity_with_fragment"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_48"
-            android:layout_marginTop="16dp"
-            android:text="MainMap in fragment"
-            app:layout_constraintEnd_toEndOf="@+id/btn_launch_map_with_button"
-            app:layout_constraintStart_toStartOf="@+id/btn_launch_map_with_button"
-            app:layout_constraintTop_toBottomOf="@+id/btn_launch_map_with_button" />
+            android:layout_height="wrap_content"
+            android:text="MainMap in fragment" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

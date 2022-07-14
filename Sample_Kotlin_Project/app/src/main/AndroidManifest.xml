@@ -24,6 +24,10 @@
         <activity
             android:name=".activities.SampleMapWithUiToolsActivity"
             android:configChanges="locale|layoutDirection" />
+
+        <activity
+            android:name=".activities.SearchableListActivity"
+            android:configChanges="locale|layoutDirection" />
         <activity
             android:name=".activities.SampleMapWithAButtonActivity"
             android:configChanges="locale|layoutDirection" />

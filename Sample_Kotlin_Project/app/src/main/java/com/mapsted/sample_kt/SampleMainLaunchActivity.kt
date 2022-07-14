@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import com.mapsted.sample_kt.activities.SampleActivityWithFragment
 import com.mapsted.sample_kt.activities.SampleMapWithAButtonActivity
 import com.mapsted.sample_kt.activities.SampleMapWithUiToolsActivity
+import com.mapsted.sample_kt.activities.SearchableListActivity
 import com.mapsted.sample_kt.databinding.ActivitySampleMainLaunchBinding
 
 class SampleMainLaunchActivity : AppCompatActivity() {
@@ -19,6 +20,11 @@ class SampleMainLaunchActivity : AppCompatActivity() {
 
         binding.btnLaunchMapWithTools.setOnClickListener {
             val intent = Intent(context, SampleMapWithUiToolsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnLaunchPoiList.setOnClickListener {
+            val intent = Intent(context, SearchableListActivity::class.java)
             startActivity(intent)
         }
 
