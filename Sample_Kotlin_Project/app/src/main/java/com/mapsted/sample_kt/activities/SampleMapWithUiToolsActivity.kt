@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.mapsted.map.MapApi
 import com.mapsted.map.MapApi.DefaultSelectPropertyListener
 import com.mapsted.map.MapSelectionChangeListener
+import com.mapsted.map.MapstedMapApi
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
@@ -19,6 +20,7 @@ import com.mapsted.positioning.core.utils.common.Params
 import com.mapsted.positioning.coreObjects.Entity
 import com.mapsted.positioning.coreObjects.SearchEntity
 import com.mapsted.sample_kt.R
+import com.mapsted.sample_kt.SampleMyApplication
 import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
 import com.mapsted.ui.CustomParams
 import com.mapsted.ui.MapUiApi
@@ -33,13 +35,16 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     private lateinit var mBinding: ActivitySampleMainBinding
 
     private var sdk: MapUiApi? = null
-    private var mapApi: MapApi? = null
+    private lateinit var  mapApi: MapApi;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sample_main)
-        sdk = MapstedSdkController.newInstance(applicationContext)
-        mapApi = sdk?.mapApi
+        mapApi = MapstedMapApi.newInstance(
+            applicationContext,
+            (application as SampleMyApplication).coreApi
+        )
+        sdk = MapstedSdkController.newInstance(applicationContext, mapApi)
         Params.initialize(this)
         setupMapstedSdk()
     }
@@ -142,21 +147,30 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                                 propertyId: Int,
                                 previousPropertyId: Int
                             ) {
-                                Log.d(TAG, "onPropertySelectionChange: propertyId $propertyId, previousPropertyId $previousPropertyId")
+                                Log.d(
+                                    TAG,
+                                    "onPropertySelectionChange: propertyId $propertyId, previousPropertyId $previousPropertyId"
+                                )
                             }
 
                             override fun onBuildingSelectionChange(
                                 propertyId: Int, buildingId: Int, previousBuildingId: Int
                             ) {
-                                Log.d(TAG, "onBuildingSelectionChange: propertyId $propertyId, buildingId $buildingId, previousBuildingId $previousBuildingId")
+                                Log.d(
+                                    TAG,
+                                    "onBuildingSelectionChange: propertyId $propertyId, buildingId $buildingId, previousBuildingId $previousBuildingId"
+                                )
                             }
 
                             override fun onFloorSelectionChange(buildingId: Int, floorId: Int) {
-                                Log.d(TAG, "onFloorSelectionChange: buildingId $buildingId, floorId $floorId")
+                                Log.d(
+                                    TAG,
+                                    "onFloorSelectionChange: buildingId $buildingId, floorId $floorId"
+                                )
                             }
 
-                            override fun onEntitySelectionChange(entityId: Int) {
-                                Log.d(TAG, "onEntitySelectionChange: entityId $entityId")
+                            override fun onEntitySelectionChange(entity: Entity?) {
+                                Log.d(TAG, "onEntitySelectionChange: entityId $entity")
                             }
                         })
                         mapApi!!.selectEntity(entity);

@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mapsted.corepositioning.cppObjects.swig.CppRouteResponse;
 import com.mapsted.map.MapApi;
 import com.mapsted.map.MapstedMapApi;
 import com.mapsted.map.models.MapInitializationDetails;
@@ -16,7 +17,16 @@ import com.mapsted.map.views.MapstedMapRange;
 import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
+import com.mapsted.positioning.coreObjects.ISearchable;
+import com.mapsted.positioning.coreObjects.RouteRequest;
+import com.mapsted.positioning.coreObjects.RoutingRequestCallback;
+import com.mapsted.positioning.coreObjects.RoutingResponse;
+import com.mapsted.positioning.coreObjects.Waypoint;
+import com.mapsted.positioning.coreObjects.WaypointHelper;
 import com.mapsted.sample.R;
+import com.mapsted.ui.map.routing.preview.RoutePreviewFragment;
+
+import java.util.List;
 
 
 public class SampleMapActivity extends AppCompatActivity {
@@ -68,6 +78,7 @@ public class SampleMapActivity extends AppCompatActivity {
                         Log.d(TAG, "onPlotted: isSuccess: " + isSuccess + ", propertyId: " + propertyId);
                     }
                 });
+                showRouting();
             }
 
             @Override
@@ -81,6 +92,39 @@ public class SampleMapActivity extends AppCompatActivity {
                 Log.d(TAG, "onMessage: " + s);
             }
         });
+    }
+
+    private void showRouting() {
+        ISearchable destinationSearchable;
+        Waypoint waypoint = WaypointHelper.from(destinationSearchable);
+        RouteRequest routeRequest = new RouteRequest.Builder().addDestinationWaypoint(waypoint).build();
+        mapApi.requestRouting(routeRequest, new RoutingRequestCallback() {
+            @Override
+            public void onSuccess(RoutingResponse routeResponse) {
+                showRoutePreview(routeResponse);
+            }
+
+
+            @Override
+            public void onError(CppRouteResponse.ErrorType errorType, String error, List<String> alertIds) {
+
+            }
+        });
+    }
+
+    private void showRoutePreview(RoutingResponse routeResponse) {
+        RoutePreviewFragment routePreviewFragment = RoutePreviewFragment.newInstance(routeResponse, new RoutePreviewFragment.Listener() {
+            @Override
+            public void onRoutePreviewCreated() {
+
+            }
+
+            @Override
+            public void onRoutePreviewDestroyed() {
+
+            }
+        });
+        getSupportFragmentManager().beginTransaction().add(containerId, routePreviewFragment).commit();
     }
 
     @Override

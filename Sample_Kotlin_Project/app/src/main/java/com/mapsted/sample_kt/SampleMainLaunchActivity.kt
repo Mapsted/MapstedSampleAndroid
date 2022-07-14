@@ -7,18 +7,24 @@ import androidx.databinding.DataBindingUtil
 import com.mapsted.sample_kt.activities.SampleActivityWithFragment
 import com.mapsted.sample_kt.activities.SampleMapWithAButtonActivity
 import com.mapsted.sample_kt.activities.SampleMapWithUiToolsActivity
+import com.mapsted.sample_kt.activities.SamplePoiListActivity
 import com.mapsted.sample_kt.databinding.ActivitySampleMainLaunchBinding
 
 class SampleMainLaunchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val binding: ActivitySampleMainLaunchBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_sample_main_launch)
         val context = this
-
         binding.btnLaunchMapWithTools.setOnClickListener {
             val intent = Intent(context, SampleMapWithUiToolsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnLaunchPoiList.setOnClickListener {
+            val intent = Intent(context, SamplePoiListActivity::class.java)
             startActivity(intent)
         }
 
