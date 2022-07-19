@@ -78,7 +78,7 @@ public class SampleMapActivity extends AppCompatActivity {
                         Log.d(TAG, "onPlotted: isSuccess: " + isSuccess + ", propertyId: " + propertyId);
                     }
                 });
-                showRouting();
+//                showRouting();
             }
 
             @Override
@@ -94,38 +94,38 @@ public class SampleMapActivity extends AppCompatActivity {
         });
     }
 
-    private void showRouting() {
-        ISearchable destinationSearchable;
-        Waypoint waypoint = WaypointHelper.from(destinationSearchable);
-        RouteRequest routeRequest = new RouteRequest.Builder().addDestinationWaypoint(waypoint).build();
-        mapApi.requestRouting(routeRequest, new RoutingRequestCallback() {
-            @Override
-            public void onSuccess(RoutingResponse routeResponse) {
-                showRoutePreview(routeResponse);
-            }
+//    private void showRouting() {
+//        ISearchable destinationSearchable;
+//        Waypoint waypoint = WaypointHelper.from(destinationSearchable);
+//        RouteRequest routeRequest = new RouteRequest.Builder().addDestinationWaypoint(waypoint).build();
+//        mapApi.requestRouting(routeRequest, new RoutingRequestCallback() {
+//            @Override
+//            public void onSuccess(RoutingResponse routeResponse) {
+////                showRoutePreview(routeResponse);
+//            }
+//
+//
+//            @Override
+//            public void onError(CppRouteResponse.ErrorType errorType, String error, List<String> alertIds) {
+//
+//            }
+//        });
+//    }
 
-
-            @Override
-            public void onError(CppRouteResponse.ErrorType errorType, String error, List<String> alertIds) {
-
-            }
-        });
-    }
-
-    private void showRoutePreview(RoutingResponse routeResponse) {
-        RoutePreviewFragment routePreviewFragment = RoutePreviewFragment.newInstance(routeResponse, new RoutePreviewFragment.Listener() {
-            @Override
-            public void onRoutePreviewCreated() {
-
-            }
-
-            @Override
-            public void onRoutePreviewDestroyed() {
-
-            }
-        });
-        getSupportFragmentManager().beginTransaction().add(containerId, routePreviewFragment).commit();
-    }
+//    private void showRoutePreview(RoutingResponse routeResponse) {
+//        RoutePreviewFragment routePreviewFragment = RoutePreviewFragment.newInstance(routeResponse, new RoutePreviewFragment.Listener() {
+//            @Override
+//            public void onRoutePreviewCreated() {
+//
+//            }
+//
+//            @Override
+//            public void onRoutePreviewDestroyed() {
+//
+//            }
+//        });
+//        getSupportFragmentManager().beginTransaction().add(containerId, routePreviewFragment).commit();
+//    }
 
     @Override
     protected void onDestroy() {
