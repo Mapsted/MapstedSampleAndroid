@@ -212,8 +212,8 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                                 )
                             }
 
-                            override fun onEntitySelectionChange(entityId: Int) {
-                                Log.d(TAG, "onEntitySelectionChange: entityId $entityId")
+                            override fun onEntitySelectionChange(entity: Entity?) {
+                                Log.d(TAG, "onEntitySelectionChange: entityId $entity")
                             }
                         })
                         mapApi!!.selectEntity(entity);

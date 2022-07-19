@@ -127,7 +127,7 @@ class SampleMapWithAButtonActivity : AppCompatActivity(), MapstedMapUiApiProvide
     }
 
     override fun onDestroy() {
-        mapUiApi!!.onDestroy()
+        mapUiApi.onDestroy()
         super.onDestroy()
     }
 }
