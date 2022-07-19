@@ -186,7 +186,7 @@ public class SampleMapWithListActivity extends AppCompatActivity implements Maps
                 ivCategoryImage.setImageDrawable(resource);
             }
         };
-        String imageUrl = "http://www.example.com/" + parentCategory.getImageGuid();
+        String imageUrl = parentCategory.getImageUrl();
         Log.d(TAG, "setParentCategory: imageUrl=" + imageUrl);
         Glide.with(ivCategoryImage)
                 .load(imageUrl)

@@ -21,6 +21,7 @@ import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
+import com.mapsted.positioning.coreObjects.Entity;
 import com.mapsted.positioning.coreObjects.SearchEntity;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
@@ -139,7 +140,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
                         }
 
                         @Override
-                        public void onEntitySelectionChange(int entityId) {
+                        public void onEntitySelectionChange(Entity entityId) {
                             Log.d(TAG, "onEntitySelectionChange: entityId " + entityId);
                         }
                     });

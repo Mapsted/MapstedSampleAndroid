@@ -44,8 +44,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:1.2.0"
 
-    implementation 'com.mapsted:sdk-ui-components:4.6.5.+'
-    implementation 'com.mapsted:sdk-map-ui:4.6.5.+'
-    implementation 'com.mapsted:sdk-map:4.6.5.+'
-    implementation 'com.mapsted:sdk-core:4.6.5.+'
+    implementation 'com.mapsted:sdk-ui-components:4.6.+'
+    implementation 'com.mapsted:sdk-map-ui:4.6.+'
+    implementation 'com.mapsted:sdk-map:4.6.+'
+    implementation 'com.mapsted:sdk-core:4.6.+'
 }
