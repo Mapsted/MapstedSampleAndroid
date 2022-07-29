@@ -1,13 +1,14 @@
 package com.mapsted.sample_kt.activities
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.mapsted.corepositioning.cppObjects.swig.CppRouteResponse
 import com.mapsted.map.MapApi
-import com.mapsted.map.MapApi.DefaultSelectPropertyListener
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
@@ -15,6 +16,7 @@ import com.mapsted.positioning.MapstedInitCallback
 import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
+import com.mapsted.positioning.coreObjects.*
 import com.mapsted.sample_kt.R
 import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
 import com.mapsted.ui.CustomParams
@@ -24,9 +26,10 @@ import com.mapsted.ui.MapstedSdkController
 import com.mapsted.ui.search.SearchCallbacksProvider
 
 
-class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
+class SampleRoutePreviewActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     SearchCallbacksProvider {
 
+    private lateinit var context: Context
     private lateinit var mBinding: ActivitySampleMainBinding
 
     private var sdk: MapUiApi? = null
@@ -40,6 +43,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
         mapApi = sdk?.mapApi
         Params.initialize(this)
         setupMapstedSdk()
+        context = this;
     }
 
     override fun onRequestPermissionsResult(
@@ -96,14 +100,17 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                 override fun onSuccess() {
                     Log.d(TAG, "onSuccess: ")
                     val propertyId = 504
-                    mapApi!!.selectPropertyAndDrawIfNeeded(
-                        propertyId,
-                        object : DefaultSelectPropertyListener() {
-                            override fun onPlotted(isSuccess: Boolean, propertyId: Int) {
-                                super.onPlotted(isSuccess, propertyId)
-                                Log.d(TAG, "onPlotted: propertyId=$propertyId success=$isSuccess")
-                            }
-                        })
+                    val propertyManager = sdk?.mapApi?.coreApi?.propertyManager()
+                    propertyManager?.findEntityByName("Gap", propertyId) { results1 ->
+                        val r1 = results1[0]
+                        Log.d(TAG, "onSuccess: findEntityByName: name= ${r1.name}")
+                        propertyManager.findEntityByName("Starbucks", propertyId) { results2 ->
+                            val r2 = results2[0]
+                            Log.d(TAG, "onSuccess: findEntityByName: name= ${r2.name}")
+                            //Gap to Starbucks
+                            showRoutingPreview(r1, r2)
+                        }
+                    }
                 }
 
                 override fun onFailure(sdkError: SdkError) {
@@ -114,6 +121,30 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                     Log.d(TAG, "onMessage: $s")
                 }
             })
+    }
+
+    private fun showRoutingPreview(start: ISearchable, destination: ISearchable) {
+        Log.d(TAG, "showRoutingPreview: start=${start} , destination=${destination}")
+
+        val destinationWaypoint = WaypointHelper.from(destination)
+        val startWaypoint = WaypointHelper.from(start)
+        val routeRequest = RouteRequest.Builder()
+            .setRouteOptions(RouteOptions(true, true, true, false , false))
+            .setStartWaypoint(startWaypoint)
+            .addDestinationWaypoint(destinationWaypoint)
+            .build();
+        sdk?.mapApi?.requestRouting(routeRequest, object : RoutingRequestCallback {
+            override fun onSuccess(routeResponse: RoutingResponse?) {
+                sdk?.mapFragment?.showRoutePreviewFragment(routeResponse)
+            }
+
+            override fun onError(errorType: CppRouteResponse.ErrorType?, error: String?, alertIds: MutableList<String>?) {
+                Log.d(TAG, "onError: errorType $errorType $error")
+                runOnUiThread {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        })
     }
 
     override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
@@ -132,6 +163,6 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     }
 
     companion object {
-        private val TAG = SampleMapWithUiToolsActivity::class.java.simpleName
+        private val TAG = SampleRoutePreviewActivity::class.java.simpleName
     }
 }

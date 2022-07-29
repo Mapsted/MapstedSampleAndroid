@@ -81,7 +81,6 @@ class SampleFragment : Fragment() {
 
         override fun onSuccess() {
             Log.d(TAG, "onSuccess: ")
-            sdk!!.setSelectedFloor(-1)
         }
 
         override fun onFailure(sdkError: SdkError) {

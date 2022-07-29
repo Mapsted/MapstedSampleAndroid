@@ -20,6 +20,24 @@
             android:text="Launch poi list" />
 
         <Button
+            android:id="@+id/btnLaunchRoutePreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch Route Preview" />
+
+        <Button
+            android:id="@+id/btnLaunchSelectEntity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch Select Entity" />
+
+        <Button
+            android:id="@+id/btnLaunchCoreActivityMethods"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch Core - check logcat" />
+
+        <Button
             android:id="@+id/btn_launch_map_with_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

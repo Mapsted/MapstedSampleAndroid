@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.mapsted.sample_kt.activities.SampleActivityWithFragment
-import com.mapsted.sample_kt.activities.SampleMapWithAButtonActivity
-import com.mapsted.sample_kt.activities.SampleMapWithUiToolsActivity
-import com.mapsted.sample_kt.activities.SearchableListActivity
+import com.mapsted.sample_kt.activities.*
 import com.mapsted.sample_kt.databinding.ActivitySampleMainLaunchBinding
 
 class SampleMainLaunchActivity : AppCompatActivity() {
@@ -27,6 +24,24 @@ class SampleMainLaunchActivity : AppCompatActivity() {
             val intent = Intent(context, SearchableListActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnLaunchRoutePreview.setOnClickListener {
+            val intent = Intent(context, SampleRoutePreviewActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnLaunchSelectEntity.setOnClickListener {
+            val intent = Intent(context, SampleSelectAnEntityActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnLaunchCoreActivityMethods.setOnClickListener {
+            val intent = Intent(context, SampleMapWithUiToolsOnCoreInitActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
 
         binding.btnLaunchMapWithButton.setOnClickListener {
             val intent = Intent(context, SampleMapWithAButtonActivity::class.java)

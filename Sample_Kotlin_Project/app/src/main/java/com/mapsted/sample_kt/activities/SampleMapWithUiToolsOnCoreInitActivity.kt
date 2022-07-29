@@ -24,7 +24,7 @@ import com.mapsted.ui.MapstedSdkController
 import com.mapsted.ui.search.SearchCallbacksProvider
 
 
-class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
+class SampleMapWithUiToolsOnCoreInitActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     SearchCallbacksProvider {
 
     private lateinit var mBinding: ActivitySampleMainBinding
@@ -87,6 +87,16 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
             object : MapstedInitCallback {
                 override fun onCoreInitialized() {
                     Log.d(TAG, "onCoreInitialized: ")
+                    val propertyId = 504
+                    sdk!!.mapApi.coreApi.propertyManager().getCategories(propertyId) {
+                        Log.d(TAG, "onCoreInitialized: ${it.rootCategories.size}")
+                        Log.d(TAG, "onCoreInitialized: ${it.allCategories.size}")
+                    }
+
+                    sdk?.mapApi?.coreApi?.propertyManager()
+                        ?.findEntityByName("Gap", propertyId) {
+                            Log.d(TAG, "onCoreInitialized: ${it.joinToString { se -> se.name }}")
+                        }
                 }
 
                 override fun onMapInitialized() {
@@ -95,15 +105,6 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
 
                 override fun onSuccess() {
                     Log.d(TAG, "onSuccess: ")
-                    val propertyId = 504
-                    mapApi!!.selectPropertyAndDrawIfNeeded(
-                        propertyId,
-                        object : DefaultSelectPropertyListener() {
-                            override fun onPlotted(isSuccess: Boolean, propertyId: Int) {
-                                super.onPlotted(isSuccess, propertyId)
-                                Log.d(TAG, "onPlotted: propertyId=$propertyId success=$isSuccess")
-                            }
-                        })
                 }
 
                 override fun onFailure(sdkError: SdkError) {
@@ -132,6 +133,6 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     }
 
     companion object {
-        private val TAG = SampleMapWithUiToolsActivity::class.java.simpleName
+        private val TAG = SampleMapWithUiToolsOnCoreInitActivity::class.java.simpleName
     }
 }

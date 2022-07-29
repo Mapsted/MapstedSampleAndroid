@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mapsted.map.MapApi
 import com.mapsted.map.MapApi.DefaultSelectPropertyListener
+import com.mapsted.map.MapSelectionChangeListener
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
@@ -15,6 +16,8 @@ import com.mapsted.positioning.MapstedInitCallback
 import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
+import com.mapsted.positioning.coreObjects.Entity
+import com.mapsted.positioning.coreObjects.SearchEntity
 import com.mapsted.sample_kt.R
 import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
 import com.mapsted.ui.CustomParams
@@ -24,7 +27,7 @@ import com.mapsted.ui.MapstedSdkController
 import com.mapsted.ui.search.SearchCallbacksProvider
 
 
-class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvider,
+class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     SearchCallbacksProvider {
 
     private lateinit var mBinding: ActivitySampleMainBinding
@@ -102,6 +105,7 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                             override fun onPlotted(isSuccess: Boolean, propertyId: Int) {
                                 super.onPlotted(isSuccess, propertyId)
                                 Log.d(TAG, "onPlotted: propertyId=$propertyId success=$isSuccess")
+                                selectAnEntityOnMap()
                             }
                         })
                 }
@@ -115,6 +119,49 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
                 }
             })
     }
+
+    private fun selectAnEntityOnMap() {
+        Log.d(TAG, "selectAnEntityOnMap: ")
+        val coreApi = sdk!!.mapApi.coreApi
+        val propertyId = mapApi!!.selectedPropertyId
+        Toast.makeText(this, "Selecting Gap store on map", Toast.LENGTH_LONG).show()
+        coreApi.propertyManager().findEntityByName(
+            "Gap", propertyId!!
+        ) { filteredResult: List<SearchEntity> ->
+            if (filteredResult.size > 0) {
+                val searchEntity = filteredResult[0]
+                //while it may have multiple entityZones if it spans multiple floors, we will select the first one.
+                val entityZone = searchEntity.entityZones[0]
+                coreApi.propertyManager().getEntity(
+                    entityZone
+                ) { entity: Entity ->
+                    Log.d(
+                        TAG,
+                        "selectAnEntityOnMap: $entity"
+                    )
+                    mapApi!!.addMapSelectionChangeListener(object : MapSelectionChangeListener {
+                        override fun onPropertySelectionChange(propertyId: Int, previousPropertyId: Int) {
+                            Log.d(TAG, "onPropertySelectionChange: propertyId $propertyId, previous $previousPropertyId")
+                        }
+
+                        override fun onBuildingSelectionChange(propertyId: Int, buildingId: Int, previousBuildingId: Int) {
+                            Log.d(TAG, "onBuildingSelectionChange: propertyId $propertyId, buildingId $buildingId, previousBuildingId $previousBuildingId")
+                        }
+
+                        override fun onFloorSelectionChange(propertyId: Int, buildingId: Int, floorId: Int) {
+                            Log.d(TAG, "onFloorSelectionChange: buildingId $buildingId, floorId $floorId")
+                        }
+
+                        override fun onEntitySelectionChange(entityId: Entity) {
+                            Log.d(TAG, "onEntitySelectionChange: entityId $entityId")
+                        }
+                    })
+                    mapApi!!.selectEntity(entity)
+                }
+            }
+        }
+    }
+
 
     override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
         Toast.makeText(this, "Not implemented in sample", Toast.LENGTH_SHORT).show()
@@ -132,6 +179,6 @@ class SampleMapWithUiToolsActivity : AppCompatActivity(), MapstedMapUiApiProvide
     }
 
     companion object {
-        private val TAG = SampleMapWithUiToolsActivity::class.java.simpleName
+        private val TAG = SampleSelectAnEntityActivity::class.java.simpleName
     }
 }
