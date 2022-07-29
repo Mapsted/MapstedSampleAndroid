@@ -83,7 +83,6 @@ public class SampleMapUiFragment extends Fragment {
         @Override
         public void onSuccess() {
             Log.d(TAG, "onSuccess: ");
-            mapUiApi.setSelectedFloor(-1);
         }
 
         @Override

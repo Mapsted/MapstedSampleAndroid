@@ -135,7 +135,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
                         }
 
                         @Override
-                        public void onFloorSelectionChange(int buildingId, int floorId) {
+                        public void onFloorSelectionChange(int propertyId, int buildingId, int floorId) {
                             Log.d(TAG, "onFloorSelectionChange: buildingId " + buildingId + ", floorId " + floorId);
                         }
 
