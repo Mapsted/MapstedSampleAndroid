@@ -17,7 +17,7 @@
             android:id="@+id/btn_launch_poi_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Launch poi list" />
+            android:text="Launch Searchable list" />
 
         <Button
             android:id="@+id/btnLaunchRoutePreview"

@@ -52,7 +52,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
 
     //Mapsted
-    def mapstedSdkVersion = "4.6.8.9";
+    def mapstedSdkVersion = "4.6.10.4-rc-1";
     implementation "com.mapsted:sdk-ui-components:$mapstedSdkVersion"
     implementation "com.mapsted:sdk-map-ui:$mapstedSdkVersion"
     implementation "com.mapsted:sdk-map:$mapstedSdkVersion"

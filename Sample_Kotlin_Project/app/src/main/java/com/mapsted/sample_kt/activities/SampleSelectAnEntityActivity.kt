@@ -131,7 +131,7 @@ class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvide
             if (filteredResult.size > 0) {
                 val searchEntity = filteredResult[0]
                 //while it may have multiple entityZones if it spans multiple floors, we will select the first one.
-                val entityZone = searchEntity.entityZones[0]
+                val entityZone = searchEntity.entityZones.first()
                 coreApi.propertyManager().getEntity(
                     entityZone
                 ) { entity: Entity ->

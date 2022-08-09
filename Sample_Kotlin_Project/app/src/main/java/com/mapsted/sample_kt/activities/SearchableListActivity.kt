@@ -14,6 +14,7 @@ import com.mapsted.positioning.MapstedInitCallback
 import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
+import com.mapsted.positioning.coreObjects.Entity
 import com.mapsted.positioning.coreObjects.ISearchable
 import com.mapsted.sample_kt.R
 import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
@@ -121,13 +122,20 @@ class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     }
 
     private fun showSearchableListFragment(searchableList: List<ISearchable>) {
+        Log.d(TAG, "showSearchableListFragment: ${searchableList.size}")
+        val context = this;
         searchableList.forEach {
             Log.d(TAG, "showSearchableListFragment: entityZones.size" + it.entityZones.size)
             it.getLocations(mapApi?.coreApi) { it1 -> Log.d(TAG, "showSearchableListFragment: $it1") }
-            it.entityZones.forEach { it2 -> Log.d(TAG, "showSearchableListFragment: location:${it2.location}, entity:${it2.entity}, entityId:${it2.entityId}") }
+            it.entityZones.forEach { it2 -> Log.d(TAG, "showSearchableListFragment: location:${it2.location}, entityId:${it2.entityId}") }
         }
         val searchablesListFragment =
             SearchablesListFragment.newInstance("My Title", searchableList)
+        searchablesListFragment.setListener { entity ->
+            Toast.makeText(context, "clicked $entity", Toast.LENGTH_SHORT).show()
+            supportFragmentManager.beginTransaction().remove(searchablesListFragment).commitAllowingStateLoss()
+            mapApi?.selectEntity(entity)
+        }
         supportFragmentManager.beginTransaction().add(R.id.container, searchablesListFragment)
             .commit();
     }

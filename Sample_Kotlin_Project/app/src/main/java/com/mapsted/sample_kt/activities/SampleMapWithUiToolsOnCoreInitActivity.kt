@@ -6,17 +6,18 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.mapsted.corepositioning.cppObjects.swig.Position
 import com.mapsted.map.MapApi
-import com.mapsted.map.MapApi.DefaultSelectPropertyListener
 import com.mapsted.map.models.layers.BaseMapStyle
 import com.mapsted.map.views.MapPanType
 import com.mapsted.map.views.MapstedMapRange
+import com.mapsted.positioning.CoreApi
 import com.mapsted.positioning.MapstedInitCallback
 import com.mapsted.positioning.MessageType
 import com.mapsted.positioning.SdkError
 import com.mapsted.positioning.core.utils.common.Params
 import com.mapsted.sample_kt.R
-import com.mapsted.sample_kt.databinding.ActivitySampleMainBinding
+import com.mapsted.sample_kt.databinding.ActivitySampleMain1Binding
 import com.mapsted.ui.CustomParams
 import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
@@ -27,7 +28,8 @@ import com.mapsted.ui.search.SearchCallbacksProvider
 class SampleMapWithUiToolsOnCoreInitActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     SearchCallbacksProvider {
 
-    private lateinit var mBinding: ActivitySampleMainBinding
+
+    private lateinit var mBinding: ActivitySampleMain1Binding
 
     private var sdk: MapUiApi? = null
     private var mapApi: MapApi? = null
@@ -35,12 +37,25 @@ class SampleMapWithUiToolsOnCoreInitActivity : AppCompatActivity(), MapstedMapUi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "::onCreate")
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sample_main)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_sample_main1)
         sdk = MapstedSdkController.newInstance(applicationContext)
         mapApi = sdk?.mapApi
         Params.initialize(this)
         setupMapstedSdk()
+        mBinding.checkbox.setOnCheckedChangeListener { button, isCheck ->
+            if (isCheck) {
+                sdk?.mapApi?.coreApi?.locationManager()?.addPositionChangeListener(positionListener)
+            } else {
+                sdk?.mapApi?.coreApi?.locationManager()?.removePositionChangeListener(positionListener)
+            }
+        }
     }
+
+    private val positionListener: CoreApi.LocationManager.PositionChangeListener =
+        CoreApi.LocationManager.PositionChangeListener { t ->
+            mBinding.tvPositionStatus.text = "${System.currentTimeMillis()} ${t?.x} ${t?.y}"
+            Log.d(TAG, "position change: " + t);
+        }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
