@@ -81,7 +81,7 @@ class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
         CustomParams.newBuilder()
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
-            .setShowPropertyListOnMapLaunch(false)  
+            .setShowPropertyListOnMapLaunch(false)
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
 
@@ -123,15 +123,8 @@ class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
     private fun showSearchableListFragment(searchableList: List<ISearchable>) {
         searchableList.forEach {
             Log.d(TAG, "showSearchableListFragment: entityZones.size" + it.entityZones.size)
-            it.getLocations(mapApi?.coreApi) { it1->
-                Log.d(TAG, "showSearchableListFragment: " + it1)
-            }
-            it.entityZones.forEach { it2 ->
-                Log.d(
-                    TAG,
-                    "showSearchableListFragment: location:" + it2.location + ", entity:" + it2.entity + ", entityId:" + it2.entityId
-                )
-            }
+            it.getLocations(mapApi?.coreApi) { it1 -> Log.d(TAG, "showSearchableListFragment: $it1") }
+            it.entityZones.forEach { it2 -> Log.d(TAG, "showSearchableListFragment: location:${it2.location}, entity:${it2.entity}, entityId:${it2.entityId}") }
         }
         val searchablesListFragment =
             SearchablesListFragment.newInstance("My Title", searchableList)
