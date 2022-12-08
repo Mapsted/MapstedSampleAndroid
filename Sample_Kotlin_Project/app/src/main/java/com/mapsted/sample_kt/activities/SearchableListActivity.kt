@@ -23,7 +23,7 @@ import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
 import com.mapsted.ui.MapstedSdkController
 import com.mapsted.ui.search.SearchCallbacksProvider
-import com.mapsted.ui.searchables_list.SearchablesListFragment
+import com.mapsted.ui.searchables_list.SearchablesList
 
 
 class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
@@ -130,12 +130,13 @@ class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
             it.entityZones.forEach { it2 -> Log.d(TAG, "showSearchableListFragment: location:${it2.location}, entityId:${it2.entityId}") }
         }
         val searchablesListFragment =
-            SearchablesListFragment.newInstance("My Title", searchableList)
-        searchablesListFragment.setListener { entity ->
-            Toast.makeText(context, "clicked $entity", Toast.LENGTH_SHORT).show()
-            supportFragmentManager.beginTransaction().remove(searchablesListFragment).commitAllowingStateLoss()
-            mapApi?.selectEntity(entity)
-        }
+            SearchablesList.ViewFragment.newInstance("My Title", searchableList) { entity ->
+                Toast.makeText(context, "clicked $entity", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.beginTransaction().remove(SearchablesList.ViewFragment())
+                    .commitAllowingStateLoss()
+                mapApi?.selectEntity(entity)
+            }
+
         supportFragmentManager.beginTransaction().add(R.id.container, searchablesListFragment)
             .commit();
     }
