@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mapsted.corepositioning.cppObjects.swig.EntityZone;
 import com.mapsted.map.MapApi;
 import com.mapsted.map.MapSelectionChangeListener;
 import com.mapsted.map.models.layers.BaseMapStyle;
@@ -22,6 +21,7 @@ import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.positioning.coreObjects.Entity;
+import com.mapsted.positioning.coreObjects.EntityZone;
 import com.mapsted.positioning.coreObjects.SearchEntity;
 import com.mapsted.sample.R;
 import com.mapsted.ui.CustomParams;
@@ -120,7 +120,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
             if (filteredResult.size() > 0) {
                 SearchEntity searchEntity = filteredResult.get(0);
                 //while it may have multiple entityZones if it spans multiple floors, we will select the first one.
-                EntityZone entityZone = searchEntity.getEntityZones().get(0);
+                EntityZone entityZone = searchEntity.getEntityZones().iterator().next();
                 coreApi.propertyManager().getEntity(entityZone, entity -> {
                     Log.d(TAG, "selectAnEntityOnMap: " + entity);
                     mapApi.addMapSelectionChangeListener(new MapSelectionChangeListener() {
