@@ -137,11 +137,10 @@ class SampleRoutePreviewActivity : AppCompatActivity(), MapstedMapUiApiProvider,
             override fun onSuccess(routeResponse: RoutingResponse?) {
                 sdk?.mapFragment?.showRoutePreviewFragment(routeResponse)
             }
-
-            override fun onError(errorType: CppRouteResponse.ErrorType?, error: String?, alertIds: MutableList<String>?) {
-                Log.d(TAG, "onError: errorType $errorType $error")
+            override fun onError(p0: CppRouteResponse.SDKErrorType?, p1: MutableList<String>?) {
+                Log.d(TAG, "onError: errorType ${(p0?.name ?: "")}")
                 runOnUiThread {
-                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, (p0?.name ?: ""), Toast.LENGTH_SHORT).show();
                 }
             }
         })
