@@ -38,4 +38,12 @@
         android:layout_height="@dimen/dp_48"
         android:layout_marginTop="16dp"
         android:text="Map in fragment" />
+
+    <Button
+        android:id="@+id/btn_launch_loc_simulator"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="16dp"
+        android:text="Map with Location Simulator" />
+
 </LinearLayout>
