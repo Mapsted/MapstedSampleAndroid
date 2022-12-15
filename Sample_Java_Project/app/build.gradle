@@ -43,7 +43,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:1.2.0"
-    def mapstedVersion = "4.6.20.1.1"
+    def mapstedVersion = "4.6.16.1.2"
     implementation "com.mapsted:sdk-ui-components:$mapstedVersion"
     implementation "com.mapsted:sdk-map-ui:$mapstedVersion"
     implementation "com.mapsted:sdk-map:$mapstedVersion"
