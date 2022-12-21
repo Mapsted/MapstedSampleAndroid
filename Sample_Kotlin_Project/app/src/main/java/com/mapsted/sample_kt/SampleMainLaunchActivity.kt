@@ -2,6 +2,7 @@ package com.mapsted.sample_kt
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mapsted.sample_kt.activities.*
@@ -50,6 +51,11 @@ class SampleMainLaunchActivity : AppCompatActivity() {
 
         binding.btnLaunchActivityWithFragment.setOnClickListener {
             val intent = Intent(context, SampleActivityWithFragment::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnLaunchLocSimulator.setOnClickListener { v: View? ->
+            val intent = Intent(context, LocationSimulatorRoutingAndGeofenceActivity::class.java)
             startActivity(intent)
         }
     }
