@@ -57,6 +57,7 @@ dependencies {
     implementation "com.mapsted:sdk-map-ui:$mapstedSdkVersion"
     implementation "com.mapsted:sdk-map:$mapstedSdkVersion"
     implementation "com.mapsted:sdk-core:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-geofence:$mapstedSdkVersion"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

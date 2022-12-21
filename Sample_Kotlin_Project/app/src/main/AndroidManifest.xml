@@ -44,6 +44,8 @@
             android:name=".activities.SampleMapWithAButtonActivity"
             android:configChanges="locale|layoutDirection" />
 
+        <activity android:name=".activities.LocationSimulatorRoutingAndGeofenceActivity"
+            android:configChanges="locale|layoutDirection"/>
 
     </application>
 </manifest>
