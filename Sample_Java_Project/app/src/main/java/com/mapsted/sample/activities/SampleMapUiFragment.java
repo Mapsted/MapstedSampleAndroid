@@ -59,13 +59,14 @@ public class SampleMapUiFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FrameLayout mapContainerView = view.findViewById(R.id.map_container);
-        CustomParams.newBuilder()
+
+        CustomParams.newBuilder(getContext())
                 .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
                 .setShowPropertyListOnMapLaunch(true)
                 .setEnablePropertyListSelection(true)
                 .build();
-        mapUiApi.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
 
+        mapUiApi.initializeMapstedSDK((AppCompatActivity) getActivity(), mapContainerView, mapstedInitCallback);
     }
 
     private MapstedInitCallback mapstedInitCallback = new MapstedInitCallback() {

@@ -206,7 +206,7 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
 
         MapInitializationDetails mapInitializationDetails = new MapInitializationDetails(this, fl_map_content);
 
-        mapApi.initializeMapstedMapApi(mapInitializationDetails, new MapApi.MapInitCallback() {
+        mapApi.setup().initialize(mapInitializationDetails, new MapApi.MapInitCallback() {
             @Override
             public void onFailure(SdkError sdkError) {
                 Logger.v("MapSdk: Initialize: onFailure");

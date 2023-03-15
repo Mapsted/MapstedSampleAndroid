@@ -60,7 +60,7 @@ public class SampleMapActivity extends AppCompatActivity {
 
         MapInitializationDetails mapInitDetail = new MapInitializationDetails(this, flMapContainer);
 
-        mapApi.initializeMapstedMapApi(mapInitDetail, new MapApi.MapInitCallback() {
+        mapApi.setup().initialize(mapInitDetail, new MapApi.MapInitCallback() {
             @Override
             public void onFailure(SdkError sdkError) {
                 //this api (map api) failed to initialize
@@ -71,7 +71,7 @@ public class SampleMapActivity extends AppCompatActivity {
             public void onSuccess() {
                 //this api (map api) is ready
                 Log.d(TAG, "onSuccess: ");
-                mapApi.selectPropertyAndDrawIfNeeded(PROPERTY_ID, new MapApi.DefaultSelectPropertyListener() {
+                mapApi.data().selectPropertyAndDrawIfNeeded(PROPERTY_ID, new MapApi.DefaultSelectPropertyListener() {
                     @Override
                     public void onPlotted(boolean isSuccess, int propertyId) {
                         super.onPlotted(isSuccess, propertyId);

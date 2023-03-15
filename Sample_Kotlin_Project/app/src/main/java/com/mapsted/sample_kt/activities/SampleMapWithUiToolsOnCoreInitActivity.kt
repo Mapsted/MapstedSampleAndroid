@@ -89,12 +89,13 @@ class SampleMapWithUiToolsOnCoreInitActivity : AppCompatActivity(), MapstedMapUi
 
     fun setupMapstedSdk() {
         Log.i(TAG, "::setupMapstedSdk")
-        CustomParams.newBuilder()
+        CustomParams.newBuilder(this)
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(true)
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
+
         sdk!!.initializeMapstedSDK(
             this,
             mBinding.myMapUiTool,

@@ -63,7 +63,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
     public void setupMapstedSdk() {
         Log.i(TAG, "::setupMapstedSdk");
 
-        CustomParams.newBuilder()
+        CustomParams.newBuilder(this)
                 .setBaseMapStyle(BaseMapStyle.GREY)
                 .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
                 .setShowPropertyListOnMapLaunch(true)
@@ -87,7 +87,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
             public void onSuccess() {
                 Log.d(TAG, "onSuccess: ");
                 int propertyId = 504;
-                mapApi.selectPropertyAndDrawIfNeeded(propertyId, new MapApi.DefaultSelectPropertyListener() {
+                mapApi.data().selectPropertyAndDrawIfNeeded(propertyId, new MapApi.DefaultSelectPropertyListener() {
                     @Override
                     public void onPlotted(boolean isSuccess, int propertyId) {
                         Log.d(TAG, "onPlotted: propertyId=" + propertyId + " success=" + isSuccess);
@@ -113,7 +113,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
     private void selectAnEntityOnMap() {
         Log.d(TAG, "selectAnEntityOnMap: ");
         CoreApi coreApi = sdk.getMapApi().getCoreApi();
-        Integer propertyId = mapApi.getSelectedPropertyId();
+        int propertyId = mapApi.data().getSelectedPropertyId();
         Toast.makeText(this, "Selecting Gap store on map", Toast.LENGTH_LONG).show();
 
         coreApi.propertyManager().findEntityByName("Gap", propertyId, filteredResult -> {
@@ -123,7 +123,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
                 EntityZone entityZone = searchEntity.getEntityZones().iterator().next();
                 coreApi.propertyManager().getEntity(entityZone, entity -> {
                     Log.d(TAG, "selectAnEntityOnMap: " + entity);
-                    mapApi.addMapSelectionChangeListener(new MapSelectionChangeListener() {
+                    mapApi.data().addMapSelectionChangeListener(new MapSelectionChangeListener() {
                         @Override
                         public void onPropertySelectionChange(int propertyId, int previousPropertyId) {
                             Log.d(TAG, "onPropertySelectionChange: propertyId " + propertyId + ", previous " + previousPropertyId);
@@ -144,7 +144,7 @@ public class SampleMapWithUiToolsActivity extends AppCompatActivity implements M
                             Log.d(TAG, "onEntitySelectionChange: entityId " + entityId);
                         }
                     });
-                    mapApi.selectEntity(entity);
+                    mapApi.data().selectEntity(entity);
                 });
             }
         });

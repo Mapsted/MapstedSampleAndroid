@@ -79,7 +79,7 @@ class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
 
     fun setupMapstedSdk() {
         Log.i(TAG, "::setupMapstedSdk")
-        CustomParams.newBuilder()
+        CustomParams.newBuilder(this)
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(false)
@@ -134,7 +134,7 @@ class SearchableListActivity : AppCompatActivity(), MapstedMapUiApiProvider,
                 Toast.makeText(context, "clicked $entity", Toast.LENGTH_SHORT).show()
                 supportFragmentManager.beginTransaction().remove(SearchablesList.ViewFragment())
                     .commitAllowingStateLoss()
-                mapApi?.selectEntity(entity)
+                mapApi?.data()?.selectEntity(entity)
             }
 
         supportFragmentManager.beginTransaction().add(R.id.container, searchablesListFragment)

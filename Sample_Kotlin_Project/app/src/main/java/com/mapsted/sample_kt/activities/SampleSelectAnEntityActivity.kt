@@ -77,12 +77,13 @@ class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvide
 
     fun setupMapstedSdk() {
         Log.i(TAG, "::setupMapstedSdk")
-        CustomParams.newBuilder()
+        CustomParams.newBuilder(this)
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(true)
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
+
         sdk!!.initializeMapstedSDK(
             this,
             mBinding.myMapUiTool,
@@ -99,7 +100,7 @@ class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvide
                 override fun onSuccess() {
                     Log.d(TAG, "onSuccess: ")
                     val propertyId = 504
-                    mapApi!!.selectPropertyAndDrawIfNeeded(
+                    mapApi!!.data()?.selectPropertyAndDrawIfNeeded(
                         propertyId,
                         object : DefaultSelectPropertyListener() {
                             override fun onPlotted(isSuccess: Boolean, propertyId: Int) {
@@ -123,7 +124,7 @@ class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvide
     private fun selectAnEntityOnMap() {
         Log.d(TAG, "selectAnEntityOnMap: ")
         val coreApi = sdk!!.mapApi.coreApi
-        val propertyId = mapApi!!.selectedPropertyId
+        val propertyId = mapApi!!.data()?.selectedPropertyId
         Toast.makeText(this, "Selecting Gap store on map", Toast.LENGTH_LONG).show()
         coreApi.propertyManager().findEntityByName(
             "Gap", propertyId!!
@@ -139,7 +140,7 @@ class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvide
                         TAG,
                         "selectAnEntityOnMap: $entity"
                     )
-                    mapApi!!.addMapSelectionChangeListener(object : MapSelectionChangeListener {
+                    mapApi!!.data()?.addMapSelectionChangeListener(object : MapSelectionChangeListener {
                         override fun onPropertySelectionChange(propertyId: Int, previousPropertyId: Int) {
                             Log.d(TAG, "onPropertySelectionChange: propertyId $propertyId, previous $previousPropertyId")
                         }
@@ -156,7 +157,7 @@ class SampleSelectAnEntityActivity : AppCompatActivity(), MapstedMapUiApiProvide
                             Log.d(TAG, "onEntitySelectionChange: entityId $entityId")
                         }
                     })
-                    mapApi!!.selectEntity(entity)
+                    mapApi!!.data()?.selectEntity(entity)
                 }
             }
         }
