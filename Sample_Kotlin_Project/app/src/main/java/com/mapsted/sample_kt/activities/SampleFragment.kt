@@ -56,7 +56,7 @@ class SampleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CustomParams.newBuilder()
+        CustomParams.newBuilder(context)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(true)
             .setEnablePropertyListSelection(true)

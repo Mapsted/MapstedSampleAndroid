@@ -78,12 +78,13 @@ class SampleRoutePreviewActivity : AppCompatActivity(), MapstedMapUiApiProvider,
 
     fun setupMapstedSdk() {
         Log.i(TAG, "::setupMapstedSdk")
-        CustomParams.newBuilder()
+        CustomParams.newBuilder(this)
             .setBaseMapStyle(BaseMapStyle.GREY)
             .setMapPanType(MapPanType.RESTRICT_TO_SELECTED_PROPERTY)
             .setShowPropertyListOnMapLaunch(true)
             .setMapZoomRange(MapstedMapRange(6.0f, 24.0f))
             .build()
+
         sdk!!.initializeMapstedSDK(
             this,
             mBinding.myMapUiTool,
@@ -133,10 +134,12 @@ class SampleRoutePreviewActivity : AppCompatActivity(), MapstedMapUiApiProvider,
             .setStartWaypoint(startWaypoint)
             .addDestinationWaypoint(destinationWaypoint)
             .build();
-        sdk?.mapApi?.requestRouting(routeRequest, object : RoutingRequestCallback {
+
+        sdk?.mapApi?.wayfinding()?.requestRouting(routeRequest, object : RoutingRequestCallback {
             override fun onSuccess(routeResponse: RoutingResponse?) {
                 sdk?.mapFragment?.showRoutePreviewFragment(routeResponse)
             }
+
             override fun onError(p0: CppRouteResponse.SDKErrorType?, p1: MutableList<String>?) {
                 Log.d(TAG, "onError: errorType ${(p0?.name ?: "")}")
                 runOnUiThread {
