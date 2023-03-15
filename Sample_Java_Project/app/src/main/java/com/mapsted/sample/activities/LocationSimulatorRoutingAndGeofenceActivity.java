@@ -439,6 +439,38 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (coreApi != null) {
+            coreApi.onResume();
+        }
+
+        if (mapApi != null) {
+            mapApi.onResume();
+        }
+
+        if (mapUiApi != null) {
+            mapUiApi.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (coreApi != null) {
+            coreApi.onPause();
+        }
+
+        if (mapApi != null) {
+            mapApi.onPause();
+        }
+
+        if (mapUiApi != null) {
+            mapUiApi.onPause();
+        }
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         Logger.v("onDestroy");
         mapUiApi.setMapViewVisibility(View.GONE);

@@ -64,6 +64,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Params.initialize(this)
+
         mBinding = DataBindingUtil.setContentView(
             this,
             R.layout.mapsted_map_activity
@@ -74,6 +75,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
         coreApi = MapstedCoreApi.newInstance(this, MapstedForegroundService::class.java)
         mapApi = MapstedMapApi.newInstance(this, coreApi)
         mapUiApi = MapstedSdkController.newInstance(applicationContext, mapApi)
+
         initializeMapstedSdk { success: Boolean ->
             Logger.v("initializeMapstedSdk: %s", if (success) "Success" else "Failed")
             mBinding.progressBar.visibility = View.GONE
@@ -85,6 +87,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                     SimulatorPath.LevelOneToFido -> "Fido"
                     SimulatorPath.LevelOneLevelTwoToFootLocker -> "Foot Locker"
                 }
+
                 Toast.makeText(
                     this@LocationSimulatorRoutingAndGeofenceActivity,
                     "To test routing, please request a route to: $destination",
@@ -123,11 +126,14 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
      * Initialize Core SDK
      */
     private fun initializeCoreSdk(onComplete: Consumer<Boolean>) {
+
         val path: List<MercatorZone> = getLocationSimulatorPath(simulatorPath)
+
         val mapstedCoreDetail: MapstedCoreDetail = MapstedCoreDetail.Builder(this)
             .setSimulatorUserPath(path)
             .setSimulatorWalkSpeedMultiplier(simulatorWalkSpeedModifier)
             .build()
+
         coreApi.initialize(mapstedCoreDetail, object : CoreApi.CoreInitCallback {
             override fun onSuccess() {
                 Logger.v("CoreSdk: Initialize: onSuccess")
@@ -141,6 +147,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
 
             override fun onMessage(messageType: MessageType, message: String) {}
         })
+
         coreApi.locationManager()
             .addPositionChangeListener { position: Position ->
                 Logger.w(
@@ -158,7 +165,8 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
         Logger.d("initializeMapUiSdk: ")
         val flMapContent: FrameLayout = mBinding.flMapContent
         val mapInitializationDetails = MapInitializationDetails(this, flMapContent)
-        mapApi.initializeMapstedMapApi(mapInitializationDetails, object : MapApi.MapInitCallback {
+
+        mapApi.setup().initialize(mapInitializationDetails, object : MapApi.MapInitCallback {
             override fun onFailure(sdkError: SdkError) {
                 Logger.v("MapSdk: Initialize: onFailure")
                 onComplete.accept(false)
@@ -208,6 +216,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                     mapViewModel.setPropertyId(propertyId)
                     mapViewModel.initPositioningOrPropertiesSetup()
                     onComplete.accept(true)
+
                     mapViewModel.userPositionInitResult.observe(
                         this@LocationSimulatorRoutingAndGeofenceActivity
                     ) { result: UserPositionInitResult ->
@@ -268,7 +277,9 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                 LatLng(43.59336167665214, -79.64134443707688),
                 LatLng(43.59344307166634, -79.6413142849905)
             )
+
             val simulatorPath: MutableList<MercatorZone> = ArrayList<MercatorZone>()
+
             Arrays.stream(levelOneLatLngs).forEach { latLng: LatLng? ->
                 simulatorPath.add(
                     MercatorZone(
@@ -279,6 +290,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                     )
                 )
             }
+
             return simulatorPath
         }
 
@@ -295,6 +307,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                 LatLng(43.59291567056778, -79.64341265093671),
                 LatLng(43.59290777113583, -79.64330951843408)
             )
+
             val levelTwoLatLngs: Array<LatLng> = arrayOf(
                 LatLng(43.59290777113583, -79.64330951843408),
                 LatLng(43.59291305771916, -79.64321462730396),
@@ -303,7 +316,9 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                 LatLng(43.59367739812217, -79.6420787112964),
                 LatLng(43.59363085147197, -79.64207400869265)
             )
+
             val simulatorPath: MutableList<MercatorZone> = ArrayList<MercatorZone>()
+
             Arrays.stream(levelOneLatLngs).forEach { latLng: LatLng? ->
                 simulatorPath.add(
                     MercatorZone(
@@ -314,6 +329,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                     )
                 )
             }
+
             Arrays.stream(levelTwoLatLngs).forEach { latLng: LatLng? ->
                 simulatorPath.add(
                     MercatorZone(
@@ -324,6 +340,7 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
                     )
                 )
             }
+
             return simulatorPath
         }
 
@@ -416,6 +433,13 @@ class LocationSimulatorRoutingAndGeofenceActivity : AppCompatActivity(), Mapsted
     override fun onStop() {
         mBinding.lifecycleOwner = null
         super.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapUiApi.onResume()
+        mapApi.onResume()
+        coreApi.onResume()
     }
 
     override fun onDestroy() {
