@@ -13,7 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.mapsted.map.MapApi;
 import com.mapsted.map.views.MapPanType;
+import com.mapsted.positioning.CoreApi;
 import com.mapsted.positioning.MapstedInitCallback;
 import com.mapsted.positioning.MessageType;
 import com.mapsted.positioning.SdkError;
@@ -26,13 +28,17 @@ public class SampleMapUiFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
 
+    private CoreApi coreApi;
+    private MapApi mapApi;
     private MapUiApi mapUiApi;
     private String TAG = SampleMapUiFragment.class.getSimpleName();
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        MapstedMapUiApiProvider  apiProvider = (MapstedMapUiApiProvider)context;
+
+
+        MapstedMapUiApiProvider apiProvider = (MapstedMapUiApiProvider)context;
         mapUiApi = apiProvider.provideMapstedUiApi();
     }
 

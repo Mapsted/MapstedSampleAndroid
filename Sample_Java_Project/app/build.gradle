@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'com.mapsted.sample'
 
     defaultConfig {
         applicationId "sample.mapsted.com"
@@ -21,24 +22,28 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+//    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+//        kotlinOptions {
+//            jvmTarget = '17'
+//        }
+//    }
+
     buildFeatures {
         dataBinding true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    configurations {
+        implementation.exclude group: 'org.jetbrains', module: 'annotations'
     }
     packagingOptions {
         resources {
             excludes += ['META-INF/gradle/incremental.annotation.processors']
         }
     }
-    namespace 'com.mapsted.sample'
-
-//    configurations {
-//        implementation.exclude group: 'com.intellij', module: 'annotations'
-//    }
 
 }
 
@@ -47,9 +52,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.2.0"
 
     // Fix Duplicate class
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
-    def mapstedVersion = "4.6.29.1.1"
+    def mapstedVersion = "5.3.3"
 
     implementation "com.mapsted:sdk-ui-components:$mapstedVersion"
     implementation "com.mapsted:sdk-map-ui:$mapstedVersion"

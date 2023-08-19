@@ -11,12 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.mapsted.MapstedBaseApplication;
 import com.mapsted.corepositioning.cppObjects.swig.LatLng;
 import com.mapsted.corepositioning.cppObjects.swig.MercatorZone;
-import com.mapsted.corepositioning.cppObjects.swig.Position;
 import com.mapsted.geofence.GeofenceApi;
 import com.mapsted.geofence.MapstedGeofenceApi;
 import com.mapsted.geofence.triggers.FloorLocationCriteria;
@@ -27,25 +26,22 @@ import com.mapsted.geofence.triggers.PropertyLocationCriteria;
 import com.mapsted.map.MapApi;
 import com.mapsted.map.MapstedMapApi;
 import com.mapsted.map.models.MapInitializationDetails;
+import com.mapsted.map.views.CustomMapParams;
 import com.mapsted.positioning.CoreApi;
-import com.mapsted.positioning.MapstedCoreApi;
-import com.mapsted.positioning.MapstedCoreDetail;
-import com.mapsted.positioning.MapstedForegroundService;
-import com.mapsted.positioning.MapstedInitCallback;
-import com.mapsted.positioning.MessageType;
+import com.mapsted.positioning.CoreParams;
 import com.mapsted.positioning.SdkError;
+import com.mapsted.positioning.SdkStatusUpdate;
 import com.mapsted.positioning.core.network.property_metadata.model.Category;
 import com.mapsted.positioning.core.utils.Logger;
 import com.mapsted.positioning.core.utils.calcs.MapCalc;
 import com.mapsted.positioning.core.utils.common.Params;
 import com.mapsted.positioning.coreObjects.EntityZone;
+import com.mapsted.ui.CustomParams;
 import com.mapsted.ui.MapUiApi;
+import com.mapsted.ui.MapstedMapUiApi;
 import com.mapsted.ui.MapstedMapUiApiProvider;
-import com.mapsted.ui.MapstedSdkController;
 import com.mapsted.ui.databinding.MapstedMapActivityBinding;
 import com.mapsted.ui.map.MapViewModel;
-import com.mapsted.ui.map.UserPositionInitResult;
-import com.mapsted.ui.map.routing.steps.StepsFragment;
 import com.mapsted.ui.search.Poi;
 import com.mapsted.ui.search.SearchCallbacksProvider;
 
@@ -96,9 +92,9 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
         mBinding.progressBar.setVisibility(View.VISIBLE);
 
         // Initialize objects
-        coreApi = MapstedCoreApi.newInstance(this, MapstedForegroundService.class);
+        coreApi = ((MapstedBaseApplication)getApplication()).getCoreApi(this);
         mapApi = MapstedMapApi.newInstance(this, coreApi);
-        mapUiApi = MapstedSdkController.newInstance(getApplicationContext(), mapApi);
+        mapUiApi = MapstedMapUiApi.newInstance(this, mapApi);
 
         initializeMapstedSdk(success -> {
             Logger.v("initializeMapstedSdk: %s", success ? "Success" : "Failed");
@@ -135,6 +131,19 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     public void initializeMapstedSdk(Consumer<Boolean> onComplete) {
         Logger.d("initializeMapstedSdk: ");
 
+        CustomParams params = CustomParams.newBuilder(this, mBinding.flBaseMap, mBinding.flMapUi)
+                .build();
+
+        List<MercatorZone> path = getLocationSimulatorPath(simulatorPath);
+
+        if (path != null && !path.isEmpty()) {
+            CoreParams.SimulatorPath paramsPath = new CoreParams.SimulatorPath();
+            paramsPath.path = path;
+            paramsPath.walkSpeedModifier = simulatorWalkSpeedModifier;
+            params.setSimulatorPath(paramsPath);
+        }
+
+
         initializeCoreSdk(coreSuccess -> {
             Logger.v("coreSuccess: %s", coreSuccess ? "Success" : "Failure");
             if (coreSuccess) {
@@ -166,12 +175,16 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
 
         List<MercatorZone> path = getLocationSimulatorPath(simulatorPath);
 
-        MapstedCoreDetail mapstedCoreDetail = new MapstedCoreDetail.Builder(this)
-                .setSimulatorUserPath(path)
-                .setSimulatorWalkSpeedMultiplier(simulatorWalkSpeedModifier)
+        CoreParams.SimulatorPath paramsPath = new CoreParams.SimulatorPath();
+
+        paramsPath.path = getLocationSimulatorPath_LevelOne_ToFido(); // For example, from above
+        paramsPath.walkSpeedModifier = simulatorWalkSpeedModifier;
+
+        CoreParams coreParams = CoreParams.newBuilder()
+                .setSimulatorPath(paramsPath)
                 .build();
 
-        coreApi.initialize(mapstedCoreDetail, new CoreApi.CoreInitCallback() {
+        coreApi.setup().initialize(coreParams, new CoreApi.CoreInitCallback() {
             @Override
             public void onSuccess() {
                 Logger.v("CoreSdk: Initialize: onSuccess");
@@ -185,12 +198,12 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
             }
 
             @Override
-            public void onMessage(MessageType messageType, String message) {
+            public void onStatusUpdate(SdkStatusUpdate sdkStatusUpdate) {
 
             }
         });
 
-        coreApi.locationManager().addPositionChangeListener(position ->
+        coreApi.locations().addPositionChangeListener(position ->
                 Logger.w("PositionChange: (%d, %d, %d) -> (%.1f, %.1f)",
                         position.getPropertyId(), position.getBuildingId(), position.getFloorId(),
                         position.getX(), position.getY()));
@@ -202,11 +215,12 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     private void initializeMapSdk(Consumer<Boolean> onComplete) {
         Logger.d("initializeMapUiSdk: ");
 
-        FrameLayout fl_map_content = mBinding.flMapContent;
+        FrameLayout flBaseMap = mBinding.flBaseMap;
 
-        MapInitializationDetails mapInitializationDetails = new MapInitializationDetails(this, fl_map_content);
+        CustomMapParams customMapParams = CustomMapParams.newBuilder(this, mBinding.flBaseMap)
+                .build();
 
-        mapApi.setup().initialize(mapInitializationDetails, new MapApi.MapInitCallback() {
+        mapApi.setup().initialize(customMapParams, new MapApi.MapInitCallback() {
             @Override
             public void onFailure(SdkError sdkError) {
                 Logger.v("MapSdk: Initialize: onFailure");
@@ -225,7 +239,7 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
             }
 
             @Override
-            public void onMessage(MessageType messageType, String message) {
+            public void onStatusUpdate(SdkStatusUpdate sdkStatusUpdate) {
 
             }
         });
@@ -237,10 +251,10 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     private void initializeMapUiSdk(Consumer<Boolean> onComplete) {
         Logger.d("initializeMapUiSdk: ");
 
-        FrameLayout fl_map_content = mBinding.flMapContent;
-        FrameLayout fl_map_ui = mBinding.flMapFragment;
+        CustomParams customParams = CustomParams.newBuilder(this).build();
+        customParams.setMapUiContainerView(mBinding.flMapUi);
 
-        mapUiApi.initializeMapstedSDK(this, fl_map_ui, fl_map_content, new MapstedInitCallback() {
+        mapUiApi.setup().initialize(customParams, new MapUiApi.MapUiInitCallback() {
             @Override
             public void onCoreInitialized() {
                 Logger.d("initializeMapUiSdk: onCoreInitialized");
@@ -261,28 +275,26 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
                 mapViewModel = provider.get(MapViewModel.class);
                 mapViewModel.init();
                 mapViewModel.setPropertyId(propertyId);
-                mapViewModel.initPositioningOrPropertiesSetup();
+                mapViewModel.init();
                 onComplete.accept(true);
 
-                mapViewModel.getUserPositionInitResult().observe( LocationSimulatorRoutingAndGeofenceActivity.this, result -> {
+                mapViewModel.getIsUserPositionAvailable().observe(LocationSimulatorRoutingAndGeofenceActivity.this, result -> {
                     Logger.d("onChange: %s", result);
-                    if (result.getResultType() == UserPositionInitResult.ResultType.SUCCESS) {
-                        mapUiApi.setMapViewVisibility(View.VISIBLE);
+                    if (result) {
+                        mapUiApi.customUi().setMapViewVisibility(View.VISIBLE);
                     }
                 });
             }
 
             @Override
             public void onFailure(SdkError sdkError) {
-                Logger.v("Initialize:  onFailure (Error: %d: %s)", sdkError.errorCode, sdkError.errorMessage);
                 mapViewModel.sdkInitFailure(sdkError);
                 onComplete.accept(false);
             }
 
             @Override
-            public void onMessage(MessageType messageType, String message) {
-                Logger.v("Initialize: onMessage: %s", message);
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show());
+            public void onStatusUpdate(SdkStatusUpdate sdkStatusUpdate) {
+
             }
         });
 
@@ -428,7 +440,7 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     @Override
     public void onStart() {
         super.onStart();
-        mapUiApi.setMapViewVisibility(View.VISIBLE);
+        mapUiApi.customUi().setMapViewVisibility(View.VISIBLE);
         mBinding.setLifecycleOwner(this);
     }
 
@@ -442,30 +454,30 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     public void onResume() {
         super.onResume();
         if (coreApi != null) {
-            coreApi.onResume();
+            coreApi.lifecycle().onResume();
         }
 
         if (mapApi != null) {
-            mapApi.onResume();
+            mapApi.lifecycle().onResume();
         }
 
         if (mapUiApi != null) {
-            mapUiApi.onResume();
+            mapUiApi.lifecycle().onResume();
         }
     }
 
     @Override
     public void onPause() {
         if (coreApi != null) {
-            coreApi.onPause();
+            coreApi.lifecycle().onPause();
         }
 
         if (mapApi != null) {
-            mapApi.onPause();
+            mapApi.lifecycle().onPause();
         }
 
         if (mapUiApi != null) {
-            mapUiApi.onPause();
+            mapUiApi.lifecycle().onPause();
         }
         super.onPause();
     }
@@ -473,10 +485,10 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     @Override
     protected void onDestroy() {
         Logger.v("onDestroy");
-        mapUiApi.setMapViewVisibility(View.GONE);
+        mapUiApi.customUi().setMapViewVisibility(View.GONE);
 
         if (coreApi != null) {
-            coreApi.onDestroy();
+            coreApi.lifecycle().onDestroy();
         }
 
         if (geofenceApi != null) {
@@ -484,11 +496,11 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
         }
 
         if (mapApi != null) {
-            mapApi.onDestroy();
+            mapApi.lifecycle().onDestroy();
         }
 
         if (mapUiApi != null) {
-            mapUiApi.onDestroy();
+            mapUiApi.lifecycle().onDestroy();
         }
 
         super.onDestroy();
@@ -501,7 +513,7 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
     @Override
     public void onRequestPermissionsResult(int requestCode, @Nullable String[] permissions,
                                            @Nullable int[] grantResults) {
-        if (!mapUiApi.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+        if (!mapUiApi.lifecycle().onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
@@ -510,6 +522,14 @@ public class LocationSimulatorRoutingAndGeofenceActivity extends AppCompatActivi
 
     //region Providers
 
+    @Override
+    public CoreApi provideMapstedCoreApi() {
+        return coreApi;
+    }
+    @Override
+    public MapApi provideMapstedMapApi() {
+        return mapApi;
+    }
     @Override
     public MapUiApi provideMapstedUiApi() {
         return mapUiApi;

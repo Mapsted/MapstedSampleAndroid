@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapsted.sample.activities.LocationSimulatorRoutingAndGeofenceActivity;
 import com.mapsted.sample.activities.SampleActivityWithFragment;
-import com.mapsted.sample.activities.SampleMapActivity;
+import com.mapsted.sample.activities.SampleMapOnlyActivity;
 import com.mapsted.sample.activities.SampleMapUiWithAButtonActivity;
 import com.mapsted.sample.activities.SampleMapWithListActivity;
 import com.mapsted.sample.activities.SampleMapWithUiToolsActivity;
@@ -42,7 +42,7 @@ public class SampleMainLaunchActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_launch_map).setOnClickListener(v -> {
-            Intent intent = new Intent(context, SampleMapActivity.class);
+            Intent intent = new Intent(context, SampleMapOnlyActivity.class);
             context.startActivity(intent);
         });
 

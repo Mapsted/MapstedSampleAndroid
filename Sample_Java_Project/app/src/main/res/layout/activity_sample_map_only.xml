@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/my_map_container"
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
