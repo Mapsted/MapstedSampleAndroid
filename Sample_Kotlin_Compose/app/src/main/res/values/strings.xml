@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Mapsted Kotlin Compose Demo</string>
+    <string name="home_title">Welcome to the Mapsted Kotlin Compose Demo!</string>
+    <string name="home_body">This demo app integrates the Mapsted Sdk with a Kotlin Compose framework.</string>
+</resources>
