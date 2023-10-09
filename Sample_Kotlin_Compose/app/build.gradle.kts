@@ -37,12 +37,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -86,7 +86,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-tasks:18.0.1")
 
     // Mapsted
-    val mapstedSdkVersion = "5.3.7"
+    val mapstedSdkVersion = "5.3.12"
     implementation("com.mapsted:sdk-map-ui:$mapstedSdkVersion")
     implementation("com.mapsted:sdk-map:$mapstedSdkVersion")
     implementation("com.mapsted:sdk-core:$mapstedSdkVersion")
