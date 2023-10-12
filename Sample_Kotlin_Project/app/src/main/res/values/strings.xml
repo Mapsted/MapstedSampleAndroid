@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Mapsted Sample Kotlin</string>
+    <string name="shopping">Shopping</string>
+</resources>

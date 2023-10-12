@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_launch_map_with_tools"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:text="Map with UI tools" />
+
+    <Button
+        android:id="@+id/btn_launch_map_with_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="16dp"
+        android:text="Map with Custom Button" />
+
+    <Button
+        android:id="@+id/btn_launch_map_with_list"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="16dp"
+        android:text="Map with MapstedListView" />
+
+    <Button
+        android:id="@+id/btn_launch_activity_with_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="16dp"
+        android:text="MainMap in fragment" />
+
+    <Button
+        android:id="@+id/btn_launch_map"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="16dp"
+        android:text="Map in fragment" />
+
+</LinearLayout>

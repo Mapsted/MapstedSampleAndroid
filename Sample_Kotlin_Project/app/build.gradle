@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        applicationId "com.mapsted.sample_kt"
+        minSdkVersion 24
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        dataBinding true
+    }
+
+//    configurations {
+//        implementation.exclude group: 'com.intellij', module: 'annotations'
+//    }
+
+    // Temporary fix until alpha10
+    packagingOptions {
+        exclude 'META-INF/gradle/incremental.annotation.processors'
+        exclude("META-INF/*.kotlin_module")
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    annotationProcessor 'androidx.databinding:databinding-compiler:3.4.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
+
+    //Mapsted
+    def mapstedSdkVersion = "4.6.29.1.1";
+
+    implementation "com.mapsted:sdk-ui-components:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-map-ui:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-map:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-core:$mapstedSdkVersion"
+    implementation "com.mapsted:sdk-geofence:$mapstedSdkVersion"
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
