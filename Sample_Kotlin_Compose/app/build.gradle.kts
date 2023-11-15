@@ -86,7 +86,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-tasks:18.0.1")
 
     // Mapsted
-    val mapstedSdkVersion = "5.3.12"
+    val mapstedSdkVersion = "5.4.0-rc-1"
     implementation("com.mapsted:sdk-map-ui:$mapstedSdkVersion")
     implementation("com.mapsted:sdk-map:$mapstedSdkVersion")
     implementation("com.mapsted:sdk-core:$mapstedSdkVersion")
