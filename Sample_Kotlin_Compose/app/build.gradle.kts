@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.mapsted.compose_demo"
         minSdk = 24
-        compileSdk = 33
+        compileSdk = 34
         versionCode = 5
         versionName = "1.0.4"
 
@@ -60,7 +60,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
@@ -86,7 +86,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-tasks:18.0.1")
 
     // Mapsted
-    val mapstedSdkVersion = "5.4.0-rc-1"
+    val mapstedSdkVersion = "5.4.26"
     implementation("com.mapsted:sdk-map-ui:$mapstedSdkVersion")
     implementation("com.mapsted:sdk-map:$mapstedSdkVersion")
     implementation("com.mapsted:sdk-core:$mapstedSdkVersion")

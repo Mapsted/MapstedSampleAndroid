@@ -18,11 +18,10 @@ import com.mapsted.ui.CustomParams
 import com.mapsted.ui.MapUiApi
 import com.mapsted.ui.MapstedMapUiApi
 import com.mapsted.ui.MapstedMapUiApiProvider
-import com.mapsted.ui.search.SearchCallbacksProvider
 import java.util.Locale
 import java.util.stream.Collectors
 
-class MapActivity : AppCompatActivity(), MapstedMapUiApiProvider, SearchCallbacksProvider {
+class MapActivity : AppCompatActivity(), MapstedMapUiApiProvider {
 
     private lateinit var binding: MapUiBinding
 
@@ -32,6 +31,7 @@ class MapActivity : AppCompatActivity(), MapstedMapUiApiProvider, SearchCallback
 
     private var tActivityStart = 0L
     private var tStartInitMapsted = 0L
+    private var tDataCached = 0L
     private var tStartPlotRequest = 0L
     private var tPlotFinished = 0L
 
@@ -117,106 +117,69 @@ class MapActivity : AppCompatActivity(), MapstedMapUiApiProvider, SearchCallback
                     Log.d(TAG, "setupMapUiApi: onSuccess")
 
                     // Grab first property in licence
-                    // Grab first property in licence
-                    coreApi?.properties()?.getInfos() { propertyInfos ->
-                        run {
-                            val numProperties = propertyInfos?.size
-                            val propertyId =
-                                if (numProperties != null && numProperties > 0) propertyInfos.keys.first() else -1;
+                    coreApi?.properties()?.getInfos() {  propertyInfos -> run {
+                        val numProperties = propertyInfos?.size
+                        val propertyId = if (numProperties != null && numProperties > 0) propertyInfos.keys.first() else -1;
 
-                            Log.d(TAG, "setupMapUiApi: onSuccess: ${propertyInfos?.keys}")
+                        Log.d(TAG, "setupMapUiApi: onSuccess: ${propertyInfos?.keys}")
 
-                            tStartPlotRequest = System.currentTimeMillis()
+                        tStartPlotRequest = System.currentTimeMillis()
 
-                            mapApi?.data()?.selectPropertyAndDrawIfNeeded(
-                                propertyId,
-                                object : MapApi.PropertyPlotListener {
+                        mapApi?.data()?.selectPropertyAndDrawIfNeeded(
+                            propertyId,
+                            object : MapApi.PropertyPlotListener {
 
-                                    override fun onCached(success: Boolean) {
-
-                                    }
-
-                                    override fun onPlotted(success: Boolean) {
-                                        tPlotFinished = System.currentTimeMillis()
-
-                                        val dtActivityToPlotSec =
-                                            (tPlotFinished - tActivityStart) / 1000.0
-                                        val dtMapInitSec =
-                                            (tStartPlotRequest - tStartInitMapsted) / 1000.0
-                                        val dtPlotSec = (tPlotFinished - tStartPlotRequest) / 1000.0
-
-                                        val msg = String.format(
-                                            Locale.CANADA,
-                                            "Property ($propertyId): %s -> PlotTime: %.1f s",
-                                            if (success) "Success" else "Failed",
-                                            dtPlotSec
-                                        )
-
-                                        Log.d(TAG, msg)
-
-                                        Log.d(
-                                            TAG, String.format(
-                                                Locale.CANADA,
-                                                "dtActivityToPlot_s: %.3f s, dtMapInit_s: %.3f, dtPlot_s: %.3f",
-                                                dtActivityToPlotSec, dtMapInitSec, dtPlotSec
-                                            )
-                                        )
-
-                                    }
-
-                                    override fun onPlottedBuilding(
-                                        buildingId: Int,
-                                        success: Boolean
-                                    ) {
-                                        Log.d(
-                                            TAG, String.format(
-                                                Locale.CANADA,
-                                                "Property ($propertyId), Building ($buildingId): %s",
-                                                if (success) "Success" else "Failed"
-                                            )
-                                        )
-                                    }
-
-                                    override fun onPlottedBuildingsComplete(
-                                        successfulBuildingIds: MutableSet<Int>?,
-                                        failedBuildingIds: MutableSet<Int>?
-                                    ) {
-                                        val successBuildingsStr = successfulBuildingIds?.stream()
-                                            ?.map { b -> b.toString() }?.collect(
-                                            Collectors.joining(",")
-                                        )
-                                        val failedBuildingsStr =
-                                            failedBuildingIds?.stream()?.map { b -> b.toString() }
-                                                ?.collect(
-                                                    Collectors.joining(",")
-                                                )
-
-                                        Log.d(
-                                            TAG, String.format(
-                                                Locale.CANADA,
-                                                "onPlottedBuildingsComplete ($propertyId), successBuildings { %s }, failedBuildings { %s }",
-                                                successBuildingsStr,
-                                                failedBuildingsStr
-                                            )
-                                        )
-                                    }
+                                override fun onCached(success: Boolean) {
 
                                 }
-                            )
-                            coreApi?.setup()?.startLocationServices(this@MapActivity,
-                                object : CoreApi.LocationServicesCallback {
-                                    override fun onSuccess() {
-                                        Log.d(TAG, "coreApi callback -> LocServices: onSuccess")
-                                    }
 
-                                    override fun onFailure(sdkError: SdkError) {
-                                        Log.d(
-                                            TAG,
-                                            "coreApi callback -> LocServices: onFailure: $sdkError"
-                                        )
-                                    }
-                                })
-                        }
+                                override fun onPlotted(success: Boolean) {
+                                    tPlotFinished = System.currentTimeMillis()
+
+                                    val dtActivityToPlotSec = (tPlotFinished - tActivityStart) / 1000.0
+                                    val dtMapInitSec = (tStartPlotRequest - tStartInitMapsted) / 1000.0
+                                    val dtPlotSec = (tPlotFinished - tStartPlotRequest) / 1000.0
+
+                                    val msg = String.format(Locale.CANADA, "Property ($propertyId): %s -> PlotTime: %.1f s",
+                                        if (success) "Success" else "Failed", dtPlotSec)
+
+                                    Log.d(TAG, msg)
+
+                                    Log.d(TAG, String.format(Locale.CANADA,
+                                        "dtActivityToPlot_s: %.3f s, dtMapInit_s: %.3f, dtPlot_s: %.3f",
+                                        dtActivityToPlotSec, dtMapInitSec, dtPlotSec))
+
+                                }
+
+                                override fun onPlottedBuilding(buildingId: Int, success: Boolean) {
+                                    Log.d(TAG, String.format(Locale.CANADA, "Property ($propertyId), Building ($buildingId): %s",
+                                        if (success) "Success" else "Failed"))
+                                }
+
+                                override fun onPlottedBuildingsComplete(
+                                    successfulBuildingIds: MutableSet<Int>?,
+                                    failedBuildingIds: MutableSet<Int>?
+                                ) {
+                                    val successBuildingsStr = successfulBuildingIds?.stream()?.map { b -> b.toString() }?.collect(Collectors.joining(","))
+                                    val failedBuildingsStr = failedBuildingIds?.stream()?.map { b -> b.toString() }?.collect(Collectors.joining(","))
+
+                                    Log.d(TAG, String.format(Locale.CANADA, "onPlottedBuildingsComplete ($propertyId), successBuildings { %s }, failedBuildings { %s }",
+                                        successBuildingsStr, failedBuildingsStr))
+                                }
+
+                            }
+                        )
+
+                        coreApi?.setup()?.startLocationServices(this@MapActivity,
+                            object : CoreApi.LocationServicesCallback {
+                                override fun onSuccess() {
+                                    Log.d(TAG, "coreApi callback -> LocServices: onSuccess")
+                                }
+                                override fun onFailure(sdkError: SdkError) {
+                                    Log.d(TAG, "coreApi callback -> LocServices: onFailure: $sdkError")
+                                }
+                            })
+                    }
                     }
                 }
 
@@ -232,24 +195,10 @@ class MapActivity : AppCompatActivity(), MapstedMapUiApiProvider, SearchCallback
                 override fun onSuccess() {
                     Log.d(TAG, "LocServices: onSuccess")
                 }
-
                 override fun onFailure(sdkError: SdkError) {
                     Log.d(TAG, "LocServices: onFailure: $sdkError")
                 }
             }
         )
     }
-
-    override fun getSearchCoreSdkCallback(): SearchCallbacksProvider.SearchCoreSdkCallback? {
-        return null
-    }
-
-    override fun getSearchFeedCallback(): SearchCallbacksProvider.SearchFeedCallback? {
-        return null
-    }
-
-    override fun getSearchAlertCallback(): SearchCallbacksProvider.SearchAlertCallback? {
-        return null
-    }
 }
-

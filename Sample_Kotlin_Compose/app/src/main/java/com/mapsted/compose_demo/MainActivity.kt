@@ -24,7 +24,6 @@ import com.mapsted.positioning.CoreParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
 
 class MainActivity : ComponentActivity(), MapstedCoreApiProvider {
 
@@ -35,10 +34,7 @@ class MainActivity : ComponentActivity(), MapstedCoreApiProvider {
     }
 
     private var tActivityStart = 0L
-
     private var tStartInitMapsted = 0L
-    private var tInitMapstedFinished = 0L
-
     private var tStartDownload = 0L
     private var tDownloadFinished = 0L
 
@@ -85,16 +81,10 @@ class MainActivity : ComponentActivity(), MapstedCoreApiProvider {
             params,
             object : CoreApi.CoreInitCallback {
                 override fun onSuccess() {
-
-                    tInitMapstedFinished = System.currentTimeMillis()
-                    val dtInitSec = (tInitMapstedFinished - tStartInitMapsted) / 1000.0
-
-                    val msg = String.format(Locale.CANADA, "coreApi: onSuccess. dt: %.1f s", dtInitSec)
-
-                    Log.d(TAG, msg)
+                    Log.d(TAG, "coreApi: onSuccess")
 
                     lifecycleScope.launch(Dispatchers.Main) {
-                        Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, "coreApi: onSuccess", Toast.LENGTH_LONG).show()
                     }
 
                     coreApi?.setup()?.startLocationServices(this@MainActivity,
@@ -106,32 +96,28 @@ class MainActivity : ComponentActivity(), MapstedCoreApiProvider {
                             override fun onFailure(sdkError: SdkError?) {
                                 Log.d(TAG, "coreApi: LocServices: onFailure " + sdkError.toString())
                             }
-                    })
+                        })
 
                     lifecycleScope.launch(Dispatchers.IO) {
                         try {
                             // Grab first property in licence
-                            val propertyInfos = coreApi?.properties()?.infos
-                            val numProperties = propertyInfos?.size
-                            val propertyId = if (numProperties != null && numProperties > 0)
-                                propertyInfos.keys.first()
-                            else -1
+                            coreApi?.properties()?.getInfos { propertyInfos ->
+                                val numProperties = propertyInfos?.size
+                                val propertyId = if (numProperties != null && numProperties > 0)
+                                    propertyInfos.keys.first()
+                                else -1
 
-                            val status = coreApi?.properties()?.getDownloadStatus(propertyId)
-                            Log.d(TAG, "pId: $propertyId -> status: $status")
+                                val status = coreApi?.properties()?.getDownloadStatus(propertyId)
+                                Log.d(TAG, "pId: $propertyId -> status: $status")
 
-                            withContext(Dispatchers.Main) {
-                                if (status?.status != DownloadStatus.DOWNLOADED) {
-                                    startPropertyDownload(propertyId)
-                                } else {
-                                    val alreadyDownloadedMsg = "Property ($propertyId) already downloaded"
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        Toast.makeText(applicationContext, alreadyDownloadedMsg, Toast.LENGTH_LONG).show()
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    if (status?.status != DownloadStatus.DOWNLOADED) {
+                                        startPropertyDownload(propertyId)
+                                    } else {
+                                        isPropertyDownloadComplete.value = true
                                     }
-                                    Log.d(TAG, alreadyDownloadedMsg)
-                                    isPropertyDownloadComplete.value = true
                                 }
-                            }
+                            };
                         } catch (e: Exception) {
                             Log.d(TAG, "Error: ${e.message}")
                             isPropertyDownloadComplete.value = true
@@ -157,20 +143,11 @@ class MainActivity : ComponentActivity(), MapstedCoreApiProvider {
     private fun startPropertyDownload(propertyId: Int) {
         Log.d(TAG, "startPropertyDownload: pId: $propertyId")
 
-        tStartDownload = System.currentTimeMillis()
-
         coreApi?.properties()?.startDownload(
             propertyId,
             object : PropertyDownloadManager.Listener {
                 override fun onComplete(propertyId: Int) {
-
-                    tDownloadFinished = System.currentTimeMillis()
-
-                    val dtDownloadSec = (tStartDownload - tDownloadFinished) / 1000.0
-
-                    val msg = String.format(Locale.CANADA,
-                        "startPropertyDownload: onComplete: pId: $propertyId dt: %.1f s",
-                        dtDownloadSec)
+                    val msg = "startPropertyDownload: onComplete: pId: $propertyId"
 
                     lifecycleScope.launch(Dispatchers.Main) {
                         Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
@@ -181,7 +158,6 @@ class MainActivity : ComponentActivity(), MapstedCoreApiProvider {
                 }
 
                 override fun onFail(propertyId: Int, exception: Exception?) {
-
                     val msg = "startPropertyDownload: onFail: pId: $propertyId -> ${exception?.message}"
 
                     lifecycleScope.launch(Dispatchers.Main) {
